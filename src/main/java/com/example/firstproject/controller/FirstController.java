@@ -18,6 +18,6 @@ public class FirstController {
     public String seeYouNext(Model model){
         // 모델
         model.addAttribute("nickname", "홍길동");
-        return "goodbye"; //templates/greetings.mustache -> 브라우저로 전송!
+        return "goodbye"; //templates/goodbye.mustache -> 브라우저로 전송!
     }
 }

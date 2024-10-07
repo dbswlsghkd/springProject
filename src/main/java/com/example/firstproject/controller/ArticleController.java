@@ -30,20 +30,15 @@ public class ArticleController {
     public String createArticle(ArticleForm form) {
         log.info(form.toString());
         //System.out.println(form.toString()); -> 로깅기능으로 대체
-
-
         // 1. Dto 변환
-
         Article article = form.toEntity();
         log.info(article.toString());
         //System.out.println(article);
-
         // 2. Repository에게 Entity를 Db에 저장
         Article saved = articleRepository.save(article);
-
         log.info(saved.toString());
 //        System.out.println(saved.toString());
-        return "";
+        return "redirect:/articles/" + saved.getId();
     }
 
     @GetMapping("/articles/{id}") // 해당 URL요청을 처리 선언

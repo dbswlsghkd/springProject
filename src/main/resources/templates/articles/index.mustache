@@ -5,6 +5,7 @@
         <th scope="col">ID</th>
         <th scope="col">Title</th>
         <th scope="col">Content</th>
+        <th scope="col">등록일자</th>
     </tr>
     </thead>
     <tbody>
@@ -14,6 +15,7 @@
             <!-- 제목에 링크 걸기 -->
             <td><a href="/articles/{{id}}">{{title}}</a></td>
             <td>{{content}}</td>
+            <td>{{regdt}}</td>
         </tr>
     {{/articleList}}
     </tbody>

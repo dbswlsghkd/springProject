@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
 @Entity // DB가 해당 객체를 인식 가능
 @AllArgsConstructor
 @ToString
@@ -22,6 +24,15 @@ public class Article {
 
     @Column
     private String content;
+
+    @Column
+    private LocalDateTime regdt;
+
+    // 엔티티가 처음 저장되기 전에 regdt에 현재 시각을 자동으로 설정
+    @PrePersist
+    public void prePersist() {
+        this.regdt = this.regdt == null ? LocalDateTime.now() : this.regdt;
+    }
 
     public void patch(Article article) {
         if (article.title != null)

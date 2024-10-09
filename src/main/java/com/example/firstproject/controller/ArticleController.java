@@ -1,8 +1,10 @@
 package com.example.firstproject.controller;
 
 import com.example.firstproject.dto.ArticleForm;
+import com.example.firstproject.dto.CommentDto;
 import com.example.firstproject.entity.Article;
 import com.example.firstproject.repository.ArticleRepository;
+import com.example.firstproject.service.CommentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +23,9 @@ public class ArticleController {
     @Autowired // 스프링 부트가 미리 생성해놓은 객체를 자동 연결
     // private ArticleRepository articleRepository = new ArticleRepository(); 생략 가능
     private ArticleRepository articleRepository;
+
+    @Autowired
+    private CommentService commentService;
 
     @GetMapping("/articles/new")
     public String newArticleForm() {
@@ -42,14 +47,27 @@ public class ArticleController {
         return "redirect:/articles/" + saved.getId();
     }
 
+    // @GetMapping("/articles/{id}") // 해당 URL요청을 처리 선언
+    // public String show(@PathVariable Long id,
+    //                    Model model) { // URL에서 id를 변수로 가져옴
+    //     log.info("id = " + id);
+    //     // 1: id로 데이터를 가져옴!
+    //     Article articleEntity = articleRepository.findById(id).orElse(null);
+    //     // 2: 가져온 데이터를 모델에 등록!
+    //     model.addAttribute("article", articleEntity);
+    //     // 3: 보여줄 페이지를 설정!
+    //     return "articles/show";
+    // }
     @GetMapping("/articles/{id}") // 해당 URL요청을 처리 선언
     public String show(@PathVariable Long id,
                        Model model) { // URL에서 id를 변수로 가져옴
         log.info("id = " + id);
         // 1: id로 데이터를 가져옴!
         Article articleEntity = articleRepository.findById(id).orElse(null);
+        List<CommentDto> commentsDtos = commentService.comments(id);
         // 2: 가져온 데이터를 모델에 등록!
         model.addAttribute("article", articleEntity);
+        model.addAttribute("commentDtos", commentsDtos);
         // 3: 보여줄 페이지를 설정!
         return "articles/show";
     }
@@ -107,4 +125,8 @@ public class ArticleController {
         // 3: 결과 페이지로 리다이렉트
         return "redirect:/articles";
     }
+
+
+
+
 }

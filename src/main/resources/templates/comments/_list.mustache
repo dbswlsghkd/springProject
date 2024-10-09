@@ -12,6 +12,9 @@
                         data-bs-nickname="{{nickname}}"
                         data-bs-body="{{body}}"
                         data-bs-article-id="{{articleId}}">수정</button>
+                <!-- 댓글 삭제 버튼 -->
+                <button type="button"
+                        class="btn btn-sm btn-outline-danger comment-delete-btn" data-comment-id="{{id}}">삭제</button>
             </div>
             <div class="card-body">
                 {{body}}
@@ -72,6 +75,7 @@
             document.querySelector("#edit-comment-article-id").value = articleId;
         });
     }
+    <!-- 댓글 수정 -->
     {
         // 수정 완료 버튼
         const commentUpdateBtn = document.querySelector("#comment-update-btn");
@@ -99,6 +103,36 @@
                 alert(msg);
                 // 현재 페이지를 새로고침
                 window.location.reload();
+            });
+        });
+    }
+    <!-- 댓글 삭제 -->
+    {
+        // 삭제 버튼 선택
+        const commentDeleteBtns = document.querySelectorAll(".comment-delete-btn");
+        // 삭제 버튼 이벤트를 처리
+        commentDeleteBtns.forEach(btn => {
+            // 각 버튼의 이벤트 처리를 등록
+            btn.addEventListener("click", (event) => {
+                // 이벤트 발생 요소를 선택
+                const commentDeleteBtn = event.target;
+                // 삭제 댓글 id 가져오기
+                const commentId = commentDeleteBtn.getAttribute("data-comment-id");
+                console.log(`삭제 버튼 클릭: ${commentId}번 댓글`);
+                // 삭제 API 호출 및 처리
+                const url = `/api/comments/${commentId}`;
+                fetch(url, {
+                    method: "DELETE"
+                }).then(response => {
+                    // 댓글 삭제 실패 처리
+                    if (!response.ok) {
+                        alert("댓글 삭제 실패..!");
+                        return;
+                    }
+                    // 삭제 성공 시, 댓글을 화면에서 지움!
+                    const target = document.querySelector(`#comments-${commentId}`);
+                    target.remove();
+                });
             });
         });
     }

@@ -105,8 +105,15 @@ public class ArticleController {
         // 2-2: 기존 데이터가 있다면, 값을 갱신
         log.info(target.toString()+"target");
         if (target != null) {
-            articleRepository.save(articleEntity);
+            // 기존 엔티티의 필드를 업데이트
+            target.setTitle(articleEntity.getTitle()); // title 업데이트
+            target.setContent(articleEntity.getContent()); // content 업데이트
+            // regdt는 업데이트하지 않음
+
+            // 업데이트된 엔티티 저장
+            articleRepository.save(target);
         }
+
         // 3: 수정 결과 페이지로 리다이렉트
         return "redirect:/articles/" + articleEntity.getId();
     }

@@ -50,13 +50,12 @@ public class LoginController {
 
         if(loginDtos != null && !loginDtos.isEmpty()) {
             log.info("로그인 성공");
-            log.info(loginDtos + "loginDtos");
             session.setAttribute("loginUserid", loginDtos.get(0).getUserid());
-            log.info(loginDtos.get(0).getUserid() + "loginDtos.get(0).getUserid()");
+            log.info("Session ID: " + session.getId());
+            log.info("Session Value: " + session.getAttribute("loginUserid"));
             return "redirect:/articles";
         }else {
             log.info("로그인 실패");
-            log.info(loginDtos + "loginDtos");
             return "login/login";
         }
 

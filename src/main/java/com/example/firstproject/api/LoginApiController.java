@@ -36,9 +36,6 @@ public class LoginApiController {
             log.info(loginDtos + "loginDtos");
             return "login";
         }
-
-
-        // return ResponseEntity.ok(loginDtos);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)

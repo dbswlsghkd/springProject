@@ -5,6 +5,7 @@ import com.example.firstproject.dto.CommentDto;
 import com.example.firstproject.entity.Article;
 import com.example.firstproject.repository.ArticleRepository;
 import com.example.firstproject.service.CommentService;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -73,12 +74,20 @@ public class ArticleController {
     }
 
     @GetMapping("/articles")
-    public String index(Model model) {
+    public String index(Model model, HttpSession session) {
+        String loginUserid = (String) session.getAttribute("loginUserid");
         // 1: 모든 Article을 가져온다!
         List<Article> articleEntityList = articleRepository.findAll();
         // 2: 가져온 Article 묶음을 뷰로 전달!
         model.addAttribute("articleList", articleEntityList);
+        model.addAttribute("loginUserid", loginUserid);
         // 3: 뷰 페이지를 설정!
+        if (loginUserid != null) {
+            log.info("세션 유지됨: " + loginUserid);
+        } else {
+            log.info("세션이 유지되지 않음");
+        }
+
         return "articles/index";
     }
 

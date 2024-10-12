@@ -1,10 +1,20 @@
 package com.example.firstproject.controller;
 
+import com.example.firstproject.dto.LoginDto;
 import com.example.firstproject.entity.Part;
+import com.example.firstproject.service.LoginService;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -12,7 +22,11 @@ import java.util.List;
 @Slf4j
 public class LoginController {
 
-    @GetMapping("/login")
+    @Autowired
+    private LoginService loginService;
+
+
+    @GetMapping("/")
     public String index(Model model) {
         // 1: 모든 Article을 가져온다!
         // List<Part> partEntityList = partRepository.findAll();
@@ -28,5 +42,29 @@ public class LoginController {
         // model.addAttribute("part", partEntityList);
         // 3: 뷰 페이지를 설정!
         return "login/login";
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestBody LoginDto dto, HttpSession session) {
+        List<LoginDto> loginDtos = loginService.logins(dto);
+
+        if(loginDtos != null && !loginDtos.isEmpty()) {
+            log.info("로그인 성공");
+            log.info(loginDtos + "loginDtos");
+            session.setAttribute("loginUserid", loginDtos.get(0).getUserid());
+            log.info(loginDtos.get(0).getUserid() + "loginDtos.get(0).getUserid()");
+            return "redirect:/articles";
+        }else {
+            log.info("로그인 실패");
+            log.info(loginDtos + "loginDtos");
+            return "login/login";
+        }
+
+        // return ResponseEntity.ok(loginDtos);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<String> handleEntityNotFoundException(EntityNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 }

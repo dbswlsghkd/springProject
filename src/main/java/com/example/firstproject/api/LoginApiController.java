@@ -24,9 +24,21 @@ public class LoginApiController {
     private LoginService loginService;
 
     @PostMapping("/api/login")
-    public ResponseEntity<List<LoginDto>> login(@RequestBody LoginDto dto) {
-        List<LoginDto> loginDtos = loginService.logins(dto.getUserid(), dto.getPsword());
-        return ResponseEntity.ok(loginDtos);
+    public String login(@RequestBody LoginDto dto) {
+        List<LoginDto> loginDtos = loginService.logins(dto);
+
+        if(loginDtos != null && !loginDtos.isEmpty()) {
+            log.info("로그인 성공");
+            log.info(loginDtos + "loginDtos");
+            return "articles";
+        }else {
+            log.info("로그인 실패");
+            log.info(loginDtos + "loginDtos");
+            return "login";
+        }
+
+
+        // return ResponseEntity.ok(loginDtos);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)

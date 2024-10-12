@@ -18,17 +18,28 @@ public class LoginService {
     @Autowired
     private LoginRepository loginRepository;
 
-    public List<LoginDto> logins(String userid, String password) {
+    public List<LoginDto> logins(LoginDto loginDto) {
         // UserId로 조회하여 값이 없을 경우 예외 처리
-        List<Users> loginList = loginRepository.findByUserIdAndPsword(userid, password);
-        log.info(loginList.toString() + "loginList");
+        List<Users> loginList = loginRepository.findByUserIdAndPsword(loginDto.getUserid(), loginDto.getPsword());
 
+        // 로그인 실패 시
         if (loginList.isEmpty()) {
-            throw new EntityNotFoundException("User not found with ID: " + userid);
+            throw new EntityNotFoundException("User not found with ID: " + loginDto.getUserid());
+        }else {
+            if(loginList.get(0).getPsword().equals(loginDto.getPsword())) {
+                // 비밀번호 일치
+                log.info(loginList.get(0).getUserid() + "getUserid");
+                log.info(loginList.get(0).getPsword() + "getPsword");
+                return convertToDtoList(loginList);
+            }else {
+                // 비밀번호 불일치
+                return null;
+            }
+
         }
 
         // Dto 변환 처리
-        return convertToDtoList(loginList);
+
     }
 
     // Dto로 변환하는 메서드 분리

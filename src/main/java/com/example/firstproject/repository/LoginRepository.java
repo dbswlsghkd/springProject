@@ -15,4 +15,5 @@ public interface LoginRepository extends CrudRepository<Users, String> {
             nativeQuery = true)
         // 네이티브 SQL 쿼리를 사용하여 특정 게시글에 달린 댓글들을 조회합니다.
     List<Users> findByUserIdAndPsword(String userid, String psword);
+
 }

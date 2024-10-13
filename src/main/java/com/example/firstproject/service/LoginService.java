@@ -1,5 +1,8 @@
 package com.example.firstproject.service;
 
+import com.example.firstproject.dto.CommentDto;
+import com.example.firstproject.entity.Article;
+import com.example.firstproject.entity.Comment;
 import com.example.firstproject.entity.Users;
 import com.example.firstproject.dto.LoginDto;
 import com.example.firstproject.repository.LoginRepository;
@@ -7,6 +10,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,11 +41,7 @@ public class LoginService {
             }
 
         }
-
-        // Dto 변환 처리
-
     }
-
     // Dto로 변환하는 메서드 분리
     private List<LoginDto> convertToDtoList(List<Users> logins) {
         return logins.stream()

@@ -49,5 +49,36 @@
 </div>
 </body>
 </html>
-
+<Script>
+    {
+        // 댓글 생성 버튼 변수화
+        const commentCreateBtn = document.querySelector("#button");
+        // 댓글 클릭 이벤트 감지!
+        commentCreateBtn.addEventListener("click", function() {
+            // 새 댓글 객체 생성
+            const register = {
+                userid: document.querySelector("#id").value,
+                name: document.querySelector("#name").value,
+                psword: document.querySelector("#psword").value
+            };
+            // 댓글 객체 출력
+            console.log(register);
+            // fetch() - 비동기 통신을 위한 API
+            const url = "/api/register";
+            fetch(url, {
+                method: "post",
+                body: JSON.stringify(register),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then(response => {
+                // http 응답 코드에 따른 메시지 출력
+                const msg = (response.ok) ? "회원가입 되었습니다." : "회원가입 실패하였습니다.!";
+                alert(msg);
+                // 현재 페이지 새로고침
+                window.location.reload();
+            });
+        });
+    }
+</script>
 <!-- Copyright (c) 2024 by Aigars Silkalns (https://codepen.io/colorlib/pen/rxddKy) -->

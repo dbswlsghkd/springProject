@@ -1,5 +1,6 @@
 package com.example.firstproject.entity;
 
+import com.example.firstproject.dto.RegisterDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -35,5 +36,17 @@ public class Users {
     @PrePersist
     public void prePersist() {
         this.in_date = this.in_date == null ? LocalDateTime.now() : this.in_date;
+    }
+
+    // 회원가입
+    public static Users createUsers(RegisterDto dto) {
+        // 예외 발생
+        // 엔티티 생성 및 반환
+        return new Users(
+                dto.getUserid(),
+                dto.getName(),
+                dto.getPsword(),
+                dto.getIn_date()
+        );
     }
 }

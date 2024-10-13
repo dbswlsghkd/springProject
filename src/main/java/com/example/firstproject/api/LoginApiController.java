@@ -3,6 +3,8 @@ package com.example.firstproject.api;
 import com.example.firstproject.dto.CommentDto;
 import com.example.firstproject.dto.LoginDto;
 import com.example.firstproject.entity.Article;
+import com.example.firstproject.entity.Users;
+import com.example.firstproject.repository.LoginRepository;
 import com.example.firstproject.service.ArticleService;
 import com.example.firstproject.service.LoginService;
 import jakarta.persistence.EntityNotFoundException;
@@ -22,6 +24,8 @@ public class LoginApiController {
 
     @Autowired
     private LoginService loginService;
+    @Autowired
+    private LoginRepository loginRepository;
 
     @PostMapping("/api/login")
     public String login(@RequestBody LoginDto dto) {
@@ -37,6 +41,8 @@ public class LoginApiController {
             return "login";
         }
     }
+
+
 
     // @GetMapping("/api/login")
     // public String login(@RequestBody LoginDto dto) {

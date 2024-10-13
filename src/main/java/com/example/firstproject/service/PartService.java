@@ -16,7 +16,7 @@ public class PartService {
     private PartRepository partRepository;
 
     public List<Part> index() {
-        return partRepository.findAll();
+        return partRepository.findPartBy();
     }
 
 }

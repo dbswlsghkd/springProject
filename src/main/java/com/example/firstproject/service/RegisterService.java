@@ -30,8 +30,10 @@ public class RegisterService {
         if (users.isEmpty()) {
             // 회원가입 엔티티 생성
             Users comment = Users.createUsers(dto);
+            log.info("comment : " + comment);
             // 회원가입 엔티티를 DB로 저장
             Users created = registerRepository.save(comment);
+            log.info("created : " + created);
             // DTO로 변경하여 반환
             return RegisterDto.createLoginDto(created);
         }else {

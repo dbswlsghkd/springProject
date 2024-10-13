@@ -30,8 +30,4 @@ public class RegisterDto {
                 users.getIn_date()
         );
     }
-
-    public Users toEntity() {
-        return new Users(userid, name, psword, in_date);
-    }
 }

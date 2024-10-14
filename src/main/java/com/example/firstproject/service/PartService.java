@@ -19,4 +19,9 @@ public class PartService {
         return partRepository.findPartBy();
     }
 
+    public List<Part> searchParts(String searchTerm) {
+        String searchPattern = "%" + searchTerm + "%";
+        return partRepository.findBySearch(searchPattern);
+    }
+
 }

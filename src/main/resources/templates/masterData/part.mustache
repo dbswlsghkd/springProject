@@ -1,6 +1,6 @@
 {{>layouts/header}}
 <div class="input-group mb-3 w-25">
-    <input type="text" class="form-control" placeholder="검색어를 입력하세요" aria-label="Recipient's username" aria-describedby="basic-addon2">
+    <input id="searchInput" type="text" class="form-control" placeholder="검색어를 입력하세요" aria-label="Recipient's username" aria-describedby="basic-addon2">
     <button class="btn btn-outline-secondary" type="button" id="button-addon2">
         <i class="bi bi-search"></i>
     </button>
@@ -33,3 +33,33 @@
 {{!>comments/_comments}}
 
 {{>layouts/footer}}
+
+<script>
+
+    document.getElementById('button-addon2').addEventListener('click', function () {
+        const searchTerm = document.getElementById('searchInput').value;
+        console.log(searchTerm);
+        fetch(`/api/parts?search=${encodeURIComponent(searchTerm)}`)
+                .then(response => response.json())
+                .then(data => {
+                    // 결과를 받아서 테이블 업데이트
+                    const tbody = document.querySelector('tbody');
+                    tbody.innerHTML = ''; // 기존 데이터 삭제
+
+                    data.forEach(part => {
+                        const row = `
+                    <tr>
+                        <th>${part.part_code}</th>
+                        <td>${part.part_name}</td>
+                        <td>${part.part_std}</td>
+                    </tr>
+                `;
+                        tbody.innerHTML += row; // 새 데이터 추가
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching parts:', error);
+                });
+    });
+
+</script>

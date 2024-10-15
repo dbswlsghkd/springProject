@@ -25,8 +25,8 @@ public class PartApiController {
     @GetMapping("/api/parts")
     public Page<Part> index(
             @RequestParam(value = "search", required = false) String searchTerm,
-            @RequestParam(value = "page", defaultValue = "0") int page,  // 페이지 번호 (0부터 시작)
-            @RequestParam(value = "size", defaultValue = "5") int size   // 페이지당 항목 수
+            @RequestParam(value = "page") int page,  // 페이지 번호 (0부터 시작)
+            @RequestParam(value = "size") int size   // 페이지당 항목 수
     ) {
         log.info("searchTerm : " + searchTerm);
         Pageable pageable = PageRequest.of(page, size);  // Pageable 객체 생성

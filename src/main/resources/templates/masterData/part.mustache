@@ -1,6 +1,6 @@
 {{>layouts/header}}
 <div class="input-group mb-3 w-25 ms-auto">
-    <input id="searchInput" type="text" class="form-control" placeholder="검색어를 입력하세요" aria-label="Recipient's username" aria-describedby="basic-addon2">
+    <input id="searchInput" type="text" class="form-control" placeholder="품번, 품명, 규격" aria-label="Recipient's username" aria-describedby="basic-addon2">
     <button class="btn btn-outline-secondary" type="button" id="button-addon2">
         <i class="bi bi-search"></i>
     </button>
@@ -8,12 +8,12 @@
 <table class="table table-striped table-sm">
     <thead class="table-dark">
     <tr>
-        <th scope="col">품번</th>
-        <th scope="col">품명</th>
-        <th scope="col">규격</th>
+        <th scope="col" style="width:150px; text-align:center;">품번</th>
+        <th scope="col" style="width:150px; text-align:center;">품명</th>
+        <th scope="col" style="width:150px; text-align:center;">규격</th>
     </tr>
     </thead>
-    <tbody>
+    <tbody id="partTableBody">
     {{#part}}
         <tr>
             <th>{{part_code}}</th>
@@ -27,7 +27,17 @@
 <!-- Pagination (페이징 UI) -->
 <nav aria-label="Page navigation">
     <ul class="pagination justify-content-center" id="pagination">
+        <li class="page-item" id="prevPage">
+            <a class="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
         <!-- 페이지 버튼은 JavaScript로 동적으로 생성 -->
+        <li class="page-item" id="nextPage">
+            <a class="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
     </ul>
 </nav>
 <!-- 수정 링크 추가 -->
@@ -44,8 +54,13 @@
 <script>
 
     // 페이지 당 항목 수와 현재 페이지 상태
-    let currentPage = 1;
-    const itemsPerPage = 5;
+    let currentPage = 0; // 0부터 시작
+    const itemsPerPage = 50;
+
+    // 초기 데이터 로드
+    document.addEventListener("DOMContentLoaded", function() {
+        fetchParts('', currentPage); // 빈 검색어로 데이터 불러오기
+    });
 
     // 검색 버튼 클릭 이벤트
     document.getElementById('button-addon2').addEventListener('click', function () {
@@ -64,15 +79,16 @@
                     // 받아온 데이터로 테이블 업데이트
                     data.content.forEach(part => {
                         const row = `
-                        <tr>
-                            <th>${part.part_code}</th>
-                            <td>${part.part_name}</td>
-                            <td>${part.part_std}</td>
-                        </tr>
-                    `;
+                    <tr>
+                        <th>${part.part_code}</th>
+                        <td>${part.part_name}</td>
+                        <td>${part.part_std}</td>
+                    </tr>
+                `;
                         tbody.innerHTML += row;
                     });
 
+                    console.log(data.totalPages);
                     // 페이징 업데이트
                     updatePagination(data.totalPages);
                 })
@@ -86,7 +102,26 @@
         const pagination = document.getElementById('pagination');
         pagination.innerHTML = ''; // 기존 페이징 버튼 초기화
 
-        for (let i = 1; i <= totalPages; i++) {
+        const startPage = Math.max(0, currentPage - 4); // 현재 페이지에서 4개 이전부터 시작
+        const endPage = Math.min(totalPages - 1, startPage + 9); // 최대 10개 페이지 버튼 표시
+
+        const prevPageElement = document.getElementById('prevPage');
+        const nextPageElement = document.getElementById('nextPage');
+
+        // Prev 버튼 상태 업데이트
+        if (prevPageElement) {
+            // prevPageElement.style.display = currentPage > 0 ? '' : 'visible';
+            prevPageElement.style.display = ''; // 항상 보여주기
+        }
+
+        // Next 버튼 상태 업데이트
+        if (nextPageElement) {
+            // nextPageElement.style.display = currentPage < totalPages - 1 ? '' : 'visible';
+            nextPageElement.style.display = ''; // 항상 보여주기
+        }
+
+        // 페이지 버튼 생성
+        for (let i = startPage; i <= endPage; i++) {
             const pageItem = document.createElement('li');
             pageItem.classList.add('page-item');
             if (i === currentPage) {
@@ -95,7 +130,7 @@
 
             const pageLink = document.createElement('a');
             pageLink.classList.add('page-link');
-            pageLink.innerText = i;
+            pageLink.innerText = i + 1; // 페이지 번호 표시 (1부터 시작)
             pageLink.href = '#';
             pageLink.addEventListener('click', function (event) {
                 event.preventDefault();
@@ -108,5 +143,23 @@
             pagination.appendChild(pageItem);
         }
     }
+
+    // Prev 버튼 클릭 이벤트
+    document.getElementById('prevPage').addEventListener('click', function (event) {
+        event.preventDefault();
+        if (currentPage > 0) {
+            currentPage--;
+            const searchTerm = document.getElementById('searchInput').value;
+            fetchParts(searchTerm, currentPage);
+        }
+    });
+
+    // Next 버튼 클릭 이벤트
+    document.getElementById('nextPage').addEventListener('click', function (event) {
+        event.preventDefault();
+        currentPage++;
+        const searchTerm = document.getElementById('searchInput').value;
+        fetchParts(searchTerm, currentPage);
+    });
 
 </script>

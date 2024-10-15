@@ -1,5 +1,5 @@
 {{>layouts/header}}
-<div class="input-group mb-3 w-25">
+<div class="input-group mb-3 w-25 ms-auto">
     <input id="searchInput" type="text" class="form-control" placeholder="검색어를 입력하세요" aria-label="Recipient's username" aria-describedby="basic-addon2">
     <button class="btn btn-outline-secondary" type="button" id="button-addon2">
         <i class="bi bi-search"></i>
@@ -23,6 +23,13 @@
     {{/part}}
     </tbody>
 </table>
+
+<!-- Pagination (페이징 UI) -->
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center" id="pagination">
+        <!-- 페이지 버튼은 JavaScript로 동적으로 생성 -->
+    </ul>
+</nav>
 <!-- 수정 링크 추가 -->
 <!--<a href="/articles/{{!article.id}}/edit" class="btn btn-primary">Edit</a>-->
 <!-- 삭제 링크 추가 -->
@@ -36,31 +43,70 @@
 
 <script>
 
+    // 페이지 당 항목 수와 현재 페이지 상태
+    let currentPage = 1;
+    const itemsPerPage = 5;
+
+    // 검색 버튼 클릭 이벤트
     document.getElementById('button-addon2').addEventListener('click', function () {
         const searchTerm = document.getElementById('searchInput').value;
-        console.log(searchTerm);
-        fetch(`/api/parts?search=${encodeURIComponent(searchTerm)}`)
+        fetchParts(searchTerm, currentPage); // 현재 페이지에 맞는 데이터를 불러옴
+    });
+
+    // API 요청 및 테이블 업데이트 함수
+    function fetchParts(searchTerm, page) {
+        fetch(`/api/parts?search=${encodeURIComponent(searchTerm)}&page=${page}&size=${itemsPerPage}`)
                 .then(response => response.json())
                 .then(data => {
-                    // 결과를 받아서 테이블 업데이트
-                    const tbody = document.querySelector('tbody');
-                    console.log(data, ' data');
-                    tbody.innerHTML = ''; // 기존 데이터 삭제
+                    const tbody = document.getElementById('partTableBody');
+                    tbody.innerHTML = ''; // 기존 데이터를 초기화
 
-                    data.forEach(part => {
+                    // 받아온 데이터로 테이블 업데이트
+                    data.content.forEach(part => {
                         const row = `
-                    <tr>
-                        <th>${part.part_code}</th>
-                        <td>${part.part_name}</td>
-                        <td>${part.part_std}</td>
-                    </tr>
-                `;
-                        tbody.innerHTML += row; // 새 데이터 추가
+                        <tr>
+                            <th>${part.part_code}</th>
+                            <td>${part.part_name}</td>
+                            <td>${part.part_std}</td>
+                        </tr>
+                    `;
+                        tbody.innerHTML += row;
                     });
+
+                    // 페이징 업데이트
+                    updatePagination(data.totalPages);
                 })
                 .catch(error => {
                     console.error('Error fetching parts:', error);
                 });
-    });
+    }
+
+    // 페이징 버튼 업데이트 함수
+    function updatePagination(totalPages) {
+        const pagination = document.getElementById('pagination');
+        pagination.innerHTML = ''; // 기존 페이징 버튼 초기화
+
+        for (let i = 1; i <= totalPages; i++) {
+            const pageItem = document.createElement('li');
+            pageItem.classList.add('page-item');
+            if (i === currentPage) {
+                pageItem.classList.add('active');
+            }
+
+            const pageLink = document.createElement('a');
+            pageLink.classList.add('page-link');
+            pageLink.innerText = i;
+            pageLink.href = '#';
+            pageLink.addEventListener('click', function (event) {
+                event.preventDefault();
+                currentPage = i;
+                const searchTerm = document.getElementById('searchInput').value;
+                fetchParts(searchTerm, currentPage); // 선택한 페이지의 데이터를 불러옴
+            });
+
+            pageItem.appendChild(pageLink);
+            pagination.appendChild(pageItem);
+        }
+    }
 
 </script>

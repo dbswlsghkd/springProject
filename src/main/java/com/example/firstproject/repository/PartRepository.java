@@ -2,19 +2,21 @@ package com.example.firstproject.repository;
 
 
 import com.example.firstproject.entity.Part;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public interface PartRepository extends CrudRepository<Part, Long> {
+public interface PartRepository extends JpaRepository<Part, Long> {
     @Query(value =
-            "SELECT top 100 * " +
+            "SELECT * " +
                     "FROM part ",
             nativeQuery = true)
 
-    ArrayList<Part> findPartBy();
+    Page<Part> findPartBy(Pageable pageable);
 
     @Query(value =
             "SELECT  * " +
@@ -23,5 +25,5 @@ public interface PartRepository extends CrudRepository<Part, Long> {
             "OR part_name like ?1 " +
             "OR part_std like ?1 ",
             nativeQuery = true)
-    List<Part> findBySearch(String searchTerm);
+    Page<Part> findBySearch(String searchTerm, Pageable pageable);
 }

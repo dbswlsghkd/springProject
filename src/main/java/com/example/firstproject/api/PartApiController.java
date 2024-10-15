@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 @RestController
@@ -17,14 +21,21 @@ public class PartApiController {
     @Autowired
     private PartService partService;
 
-    // GET 리팩토링
+    // GET API with pagination
     @GetMapping("/api/parts")
-    public List<Part> index(@RequestParam(value = "search", required = false) String searchTerm) {
+    public Page<Part> index(
+            @RequestParam(value = "search", required = false) String searchTerm,
+            @RequestParam(value = "page", defaultValue = "0") int page,  // 페이지 번호 (0부터 시작)
+            @RequestParam(value = "size", defaultValue = "5") int size   // 페이지당 항목 수
+    ) {
         log.info("searchTerm : " + searchTerm);
+        Pageable pageable = PageRequest.of(page, size);  // Pageable 객체 생성
+
+        // 검색어가 있으면 검색된 결과를, 없으면 전체 목록을 페이징 처리
         if (searchTerm != null && !searchTerm.isEmpty()) {
-            return partService.searchParts(searchTerm); // 검색어에 맞는 Part 반환
+            return partService.searchParts(searchTerm, pageable); // 검색어에 맞는 Part를 페이징 처리
         }
 
-        return partService.index(); // 전체 Part 반환
+        return partService.index(pageable); // 전체 Part를 페이징 처리
     }
 }

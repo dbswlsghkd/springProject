@@ -1,6 +1,6 @@
 {{>layouts/header}}
 <div class="input-group mb-3 w-25 ms-auto">
-    <input id="searchInput" type="text" class="form-control" placeholder="품번, 품명, 규격" aria-label="Recipient's username" aria-describedby="basic-addon2">
+    <input id="searchInput" type="text" class="form-control" placeholder="코드, 거래처명, 주소" aria-label="Recipient's username" aria-describedby="basic-addon2">
     <button class="btn btn-outline-secondary" type="button" id="button-addon2">
         <i class="bi bi-search"></i>
     </button>
@@ -8,19 +8,19 @@
 <table class="table table-striped table-sm">
     <thead class="table-dark">
     <tr>
-        <th scope="col" style="width:150px; text-align:center;">품번</th>
-        <th scope="col" style="width:150px; text-align:center;">품명</th>
-        <th scope="col" style="width:150px; text-align:center;">규격</th>
+        <th scope="col" style="width:50px; text-align:center;">거래처 코드</th>
+        <th scope="col" style="width:150px; text-align:center;">거래처명</th>
+        <th scope="col" style="width:250px; text-align:center;">주소</th>
     </tr>
     </thead>
-    <tbody id="partTableBody">
-    {{#part}}
+    <tbody id="partnerTableBody">
+    {{#partners}}
         <tr>
-            <th>{{part_code}}</th>
-            <td>{{part_name}}</td>
-            <td>{{part_std}}</td>
+            <th>{{partner_code}}</th>
+            <td>{{partner_name}}</td>
+            <td>{{partner_address}}</td>
         </tr>
-    {{/part}}
+    {{/partners}}
     </tbody>
 </table>
 
@@ -59,30 +59,30 @@
 
     // 초기 데이터 로드
     document.addEventListener("DOMContentLoaded", function() {
-        fetchParts('', currentPage); // 빈 검색어로 데이터 불러오기
+        fetchPartners('', currentPage); // 빈 검색어로 데이터 불러오기
     });
 
     // 검색 버튼 클릭 이벤트
     document.getElementById('button-addon2').addEventListener('click', function () {
         const searchTerm = document.getElementById('searchInput').value;
-        fetchParts(searchTerm, currentPage); // 현재 페이지에 맞는 데이터를 불러옴
+        fetchPartners(searchTerm, currentPage); // 현재 페이지에 맞는 데이터를 불러옴
     });
 
     // API 요청 및 테이블 업데이트 함수
-    function fetchParts(searchTerm, page) {
-        fetch(`/api/parts?search=${encodeURIComponent(searchTerm)}&page=${page}&size=${itemsPerPage}`)
+    function fetchPartners(searchTerm, page) {
+        fetch(`/api/partners?search=${encodeURIComponent(searchTerm)}&page=${page}&size=${itemsPerPage}`)
                 .then(response => response.json())
                 .then(data => {
-                    const tbody = document.getElementById('partTableBody');
+                    const tbody = document.getElementById('partnerTableBody');
                     tbody.innerHTML = ''; // 기존 데이터를 초기화
 
                     // 받아온 데이터로 테이블 업데이트
-                    data.content.forEach(part => {
+                    data.content.forEach(partners => {
                         const row = `
                     <tr>
-                        <th>${part.part_code}</th>
-                        <td>${part.part_name}</td>
-                        <td>${part.part_std}</td>
+                        <th>${partners.partner_code}</th>
+                        <td>${partners.partner_name}</td>
+                        <td>${partners.partner_address}</td>
                     </tr>
                 `;
                         tbody.innerHTML += row;
@@ -93,7 +93,7 @@
                     updatePagination(data.totalPages);
                 })
                 .catch(error => {
-                    console.error('Error fetching parts:', error);
+                    console.error('Error fetching partnerss:', error);
                 });
     }
 
@@ -136,7 +136,7 @@
                 event.preventDefault();
                 currentPage = i;
                 const searchTerm = document.getElementById('searchInput').value;
-                fetchParts(searchTerm, currentPage); // 선택한 페이지의 데이터를 불러옴
+                fetchPartners(searchTerm, currentPage); // 선택한 페이지의 데이터를 불러옴
             });
 
             pageItem.appendChild(pageLink);
@@ -150,7 +150,7 @@
         if (currentPage > 0) {
             currentPage--;
             const searchTerm = document.getElementById('searchInput').value;
-            fetchParts(searchTerm, currentPage);
+            fetchPartners(searchTerm, currentPage);
         }
     });
 
@@ -159,7 +159,7 @@
         event.preventDefault();
         currentPage++;
         const searchTerm = document.getElementById('searchInput').value;
-        fetchParts(searchTerm, currentPage);
+        fetchPartners(searchTerm, currentPage);
     });
 
 </script>

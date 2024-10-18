@@ -21,13 +21,15 @@ public class RegisterDto {
     private String name;
     private String psword;
     private LocalDateTime in_date;
+    private String role;
 
-    public static RegisterDto createLoginDto(Users users) {
+    public static RegisterDto createRegisterDto(Users users) {
         return new RegisterDto(
                 users.getUserid(),
                 users.getName(),
                 users.getPsword(),
-                users.getIn_date()
+                users.getIn_date(),
+                users.getRole()
         );
     }
 }

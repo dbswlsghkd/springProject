@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
 
@@ -26,27 +28,32 @@ public class Users {
     @Column(name = "name", length = 30, nullable = false)
     private String name;
 
-    @Column(name = "psword", length = 30, nullable = false)
+    @Column(name = "psword", length = 100, nullable = false)
     private String psword;
 
     @Column
     private LocalDateTime in_date;
 
+    @Column
+    private String role;
+
     // 엔티티가 처음 저장되기 전에 regdt에 현재 시각을 자동으로 설정
     @PrePersist
     public void prePersist() {
         this.in_date = this.in_date == null ? LocalDateTime.now() : this.in_date;
+        this.role = this.role == null ? "ROLE_USER" : this.role;
     }
 
     // 회원가입
-    public static Users createUsers(RegisterDto dto) {
+    public static Users createUsers(RegisterDto dto, String encodedPassword) {
         // 예외 발생
         // 엔티티 생성 및 반환
         return new Users(
                 dto.getUserid(),
                 dto.getName(),
-                dto.getPsword(),
-                dto.getIn_date()
+                encodedPassword, // 암호화된 비밀번호 설정
+                dto.getIn_date(),
+                dto.getRole()
         );
     }
 }

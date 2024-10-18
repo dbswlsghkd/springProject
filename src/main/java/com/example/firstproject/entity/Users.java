@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 public class Users {
 
     @Id // 대표값을 지정 like a 주민등록번호
+
     @Column(name = "userid", length = 50) // 길이를 50으로 지정
     private String userid;
 
@@ -41,7 +42,7 @@ public class Users {
     @PrePersist
     public void prePersist() {
         this.in_date = this.in_date == null ? LocalDateTime.now() : this.in_date;
-        this.role = this.role == null ? "ROLE_USER" : this.role;
+        this.role = this.role == null ? "ROLE_ADMIN" : this.role;
     }
 
     // 회원가입

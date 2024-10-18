@@ -42,11 +42,12 @@ public class SecurityConfig {
         //         .formLogin((auth) -> auth
         //                 .loginPage("/")
         //                 .loginProcessingUrl("/login") // 로그인 처리 경로 (POST)
-        //                 .defaultSuccessUrl("/articles", true)  // 로그인 성공 후 articles로 리다이렉트
+        //
         //                 .permitAll()
         //         )
         //         .logout((auth) -> auth.permitAll());  // 로그아웃 허용
 
+        //
         http
                 .csrf((auth) -> auth.disable());
 

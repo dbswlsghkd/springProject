@@ -11,10 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -39,7 +36,7 @@ public class LoginController {
     @PostMapping("/login")
     public String login(@RequestBody LoginDto dto, HttpSession session) {
         List<LoginDto> loginDtos = loginService.logins(dto);
-
+        log.info("loginDtos ====>" + loginDtos);
         if(loginDtos != null && !loginDtos.isEmpty()) {
             log.info("로그인 성공");
             session.setAttribute("loginUserid", loginDtos.get(0).getUserid());

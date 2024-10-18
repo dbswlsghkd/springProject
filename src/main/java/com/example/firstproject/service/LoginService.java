@@ -25,7 +25,7 @@ public class LoginService {
     public List<LoginDto> logins(LoginDto loginDto) {
         // UserId로 조회하여 값이 없을 경우 예외 처리
         List<Users> loginList = loginRepository.findByUserIdAndPsword(loginDto.getUserid(), loginDto.getPsword());
-
+        log.info("loginList: {}", loginList);
         // 로그인 실패 시
         if (loginList.isEmpty()) {
             throw new EntityNotFoundException("User not found with ID: " + loginDto.getUserid());
@@ -48,11 +48,11 @@ public class LoginService {
                 .map(LoginDto::createLoginDto)
                 .collect(Collectors.toList());
     }
-        // 반환
-        // return loginRepository.findByUserId(userid)
-        //         .stream()
-        //         .map(logins -> LoginDto.createLoginDto(logins))
-        //         .collect(Collectors.toList());
+    // 반환
+    // return loginRepository.findByUserId(userid)
+    //         .stream()
+    //         .map(logins -> LoginDto.createLoginDto(logins))
+    //         .collect(Collectors.toList());
     // }
 
 }

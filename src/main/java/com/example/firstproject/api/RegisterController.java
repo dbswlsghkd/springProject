@@ -2,7 +2,7 @@ package com.example.firstproject.api;
 
 import com.example.firstproject.dto.LoginDto;
 import com.example.firstproject.dto.RegisterDto;
-import com.example.firstproject.service.LoginService;
+// import com.example.firstproject.service.LoginService;
 import com.example.firstproject.service.RegisterService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

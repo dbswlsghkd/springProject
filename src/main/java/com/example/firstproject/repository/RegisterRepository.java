@@ -13,4 +13,7 @@ public interface RegisterRepository extends JpaRepository<Users, String> {
                     "WHERE userid = :userid",
             nativeQuery = true)
     List<Users> findByUserId(String userid);
+
+    // CustomUserDetailsService에서 사용
+    Users findByUserid(String userid);
 }

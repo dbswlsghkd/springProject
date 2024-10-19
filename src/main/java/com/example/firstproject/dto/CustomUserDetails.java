@@ -1,6 +1,7 @@
 package com.example.firstproject.dto;
 
 import com.example.firstproject.entity.Users;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,12 +9,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
+@Slf4j
 public class CustomUserDetails implements UserDetails {
 
     private Users users;
 
     public CustomUserDetails(Users users) {
+        log.info("Inside CustomUserDetails constructor ========> " + users);
         this.users = users;
     }
 

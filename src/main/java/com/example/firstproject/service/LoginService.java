@@ -9,6 +9,7 @@ import com.example.firstproject.repository.LoginRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,18 +23,22 @@ public class LoginService {
     @Autowired
     private LoginRepository loginRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public List<LoginDto> logins(LoginDto loginDto) {
         // UserId로 조회하여 값이 없을 경우 예외 처리
-        List<Users> loginList = loginRepository.findByUserIdAndPsword(loginDto.getUserid(), loginDto.getPsword());
+        List<Users> loginList = loginRepository.findByUserId(loginDto.getUserid());
         log.info("loginList: {}", loginList);
         // 로그인 실패 시
         if (loginList.isEmpty()) {
             throw new EntityNotFoundException("User not found with ID: " + loginDto.getUserid());
         }else {
-            if(loginList.get(0).getPsword().equals(loginDto.getPsword())) {
+            Users user = loginList.get(0);
+            if (passwordEncoder.matches(loginDto.getPsword(), user.getPsword())) {
                 // 비밀번호 일치
-                log.info(loginList.get(0).getUserid() + "getUserid");
-                log.info(loginList.get(0).getPsword() + "getPsword");
+                log.info(user.getUserid() + " getUserid");
+                log.info(user.getPsword() + " getPsword");
                 return convertToDtoList(loginList);
             }else {
                 // 비밀번호 불일치

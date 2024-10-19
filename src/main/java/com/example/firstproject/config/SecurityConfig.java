@@ -42,7 +42,8 @@ public class SecurityConfig {
         //         .formLogin((auth) -> auth
         //                 .loginPage("/")
         //                 .loginProcessingUrl("/login") // 로그인 처리 경로 (POST)
-        //
+        //                 .successForwardUrl("/articles") // 로그인 성공 시 이동할 페이지
+        //                 .failureUrl("/") // 로그인 실패 시 리다이렉트할 URL
         //                 .permitAll()
         //         )
         //         .logout((auth) -> auth.permitAll());  // 로그아웃 허용

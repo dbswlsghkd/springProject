@@ -18,6 +18,6 @@ public interface LoginRepository extends JpaRepository<Users, String> {
     List<Users> findByUserIdAndPsword(String userid, String psword);
 
     @Query(value = "SELECT * FROM users WHERE userid = ?1", nativeQuery = true)
-    Users findByUserId(String userid);
+    List<Users> findByUserId(String userid);
 
 }

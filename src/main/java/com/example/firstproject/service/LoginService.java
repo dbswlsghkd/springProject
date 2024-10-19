@@ -30,6 +30,7 @@ public class LoginService {
         // UserId로 조회하여 값이 없을 경우 예외 처리
         List<Users> loginList = loginRepository.findByUserId(loginDto.getUserid());
         log.info("loginList: {}", loginList);
+
         // 로그인 실패 시
         if (loginList.isEmpty()) {
             throw new EntityNotFoundException("User not found with ID: " + loginDto.getUserid());
@@ -42,6 +43,7 @@ public class LoginService {
                 return convertToDtoList(loginList);
             }else {
                 // 비밀번호 불일치
+                log.info(user.getPsword() + " 비밀번호 일치하지 않습니다.");
                 return null;
             }
 

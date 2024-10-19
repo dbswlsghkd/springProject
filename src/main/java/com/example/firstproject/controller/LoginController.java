@@ -33,19 +33,33 @@ public class LoginController {
         return "login/register";
     }
 
+    @GetMapping("/login")
+    public String showLoginPage(Model model) {
+        return "login/login"; // login.mustache를 반환
+    }
+
     @PostMapping("/login")
-    public String login(@RequestBody LoginDto dto, HttpSession session) {
+    public ResponseEntity<String> login(@RequestBody LoginDto dto, HttpSession session) {
         List<LoginDto> loginDtos = loginService.logins(dto);
+
+        // try {
+        //     loginDtos = loginService.logins(dto);
+        //     log.info("로그인 성공: -->" + loginDtos);
+        // } catch (EntityNotFoundException e) {
+        //     log.info("로그인 실패: " + e.getMessage());
+        //     return "/"; // 로그인 실패 시 이동
+        // }
+
         log.info("loginDtos ====>" + loginDtos);
         if(loginDtos != null && !loginDtos.isEmpty()) {
             log.info("로그인 성공");
             session.setAttribute("loginUserid", loginDtos.get(0).getUserid());
             log.info("Session ID: " + session.getId());
             log.info("Session Value: " + session.getAttribute("loginUserid"));
-            return "redirect:/articles";
+            return ResponseEntity.ok("로그인 성공");
         }else {
             log.info("로그인 실패");
-            return "login/login";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 실패"); // 로그인 실패 시 401 Unauthorized 응답
         }
 
         // return ResponseEntity.ok(loginDtos);

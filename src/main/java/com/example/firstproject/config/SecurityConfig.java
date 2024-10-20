@@ -37,16 +37,16 @@ public class SecurityConfig {
                         // 그 외 막지 못하는 경우 로그인을 통해 접근할 수 있도록 설정
                         .anyRequest().authenticated()
                 );
-        // http
-        //         //서비스 거부 메시지가 아닌 로그인 페이지로 넘어감
-        //         .formLogin((auth) -> auth
-        //                 .loginPage("/")
-        //                 .loginProcessingUrl("/login") // 로그인 처리 경로 (POST)
-        //                 .successForwardUrl("/articles") // 로그인 성공 시 이동할 페이지
-        //                 .failureUrl("/") // 로그인 실패 시 리다이렉트할 URL
-        //                 .permitAll()
-        //         )
-        //         .logout((auth) -> auth.permitAll());  // 로그아웃 허용
+        http
+                //서비스 거부 메시지가 아닌 로그인 페이지로 넘어감
+                .formLogin((auth) -> auth
+                        .loginPage("/")
+                        .loginProcessingUrl("/login") // 로그인 처리 경로 (POST)
+                        .successForwardUrl("/articles") // 로그인 성공 시 이동할 페이지
+                        .failureUrl("/") // 로그인 실패 시 리다이렉트할 URL
+                        .permitAll()
+                )
+                .logout((auth) -> auth.permitAll());  // 로그아웃 허용
 
         //
         http

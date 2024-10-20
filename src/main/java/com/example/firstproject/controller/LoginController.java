@@ -9,10 +9,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 @Controller
@@ -49,6 +54,8 @@ public class LoginController {
         //     log.info("로그인 실패: " + e.getMessage());
         //     return "/"; // 로그인 실패 시 이동
         // }
+
+
 
         log.info("loginDtos ====>" + loginDtos);
         if(loginDtos != null && !loginDtos.isEmpty()) {

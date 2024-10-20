@@ -8,6 +8,9 @@ import com.example.firstproject.service.CommentService;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +18,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 @Controller
@@ -87,6 +92,20 @@ public class ArticleController {
         } else {
             log.info("세션이 유지되지 않음");
         }
+
+        String sessid = SecurityContextHolder.getContext().getAuthentication().getName();
+        log.info("sessid : " + sessid);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        Iterator<? extends GrantedAuthority> iter = authorities.iterator();
+        GrantedAuthority auth = iter.next();
+        String role = auth.getAuthority();
+
+        log.info("role : " + role);
+
+        model.addAttribute("sessid", sessid);
+        model.addAttribute("role", role);
 
         return "articles/index";
     }

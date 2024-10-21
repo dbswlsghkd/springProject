@@ -1,4 +1,11 @@
 {{>layouts/header}}
+<div class="input-group ms-auto">
+<button type="button"
+        class="btn btn-sm btn-outline-dark"
+        data-bs-toggle="modal"
+        data-bs-target="#comment-create-modal"
+        >등록</button>
+</div>
 <div class="input-group mb-3 w-25 ms-auto">
     <input id="searchInput" type="text" class="form-control" placeholder="품번, 품명, 규격" aria-label="Recipient's username" aria-describedby="basic-addon2">
     <button class="btn btn-outline-secondary" type="button" id="button-addon2">
@@ -48,6 +55,48 @@
 
 <!--댓글 뷰 페이지 삽입-->
 {{!>comments/_comments}}
+
+<!-- Modal -->
+<div class="modal fade" id="comment-create-modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">품번 등록</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- 댓글 수정 폼-->
+                <form>
+                    <!-- 품번 입력 -->
+                    <div class="mb-3">
+                        <label class="form-label">품번</label>
+                        <input type="text" class="form-control form-control-sm" id="create-comment-partcode">
+                    </div>
+                    <!-- 품명 입력 -->
+                    <div class="mb-3">
+                        <label class="form-label">품명</label>
+                        <input type="text" class="form-control form-control-sm" id="create-comment-partname">
+                    </div>
+                    <!-- 규격 입력 -->
+                    <div class="mb-3">
+                        <label class="form-label">규격</label>
+                        <input type="text" class="form-control form-control-sm" id="create-comment-partstd">
+                    </div>
+                    <!-- 댓글 본문 입력 -->
+                    <div class="mb-3">
+                        <label class="form-label">댓글 내용</label>
+                        <textarea type="text" class="form-control form-control-sm" rows="3" id="edit-comment-body"></textarea>
+                    </div>
+                    <!-- 히든 인풋 -->
+                    <input type="hidden" id="edit-comment-id">
+                    <input type="hidden" id="edit-comment-article-id">
+                    <!-- 전송 버튼 -->
+                    <button type="button" class="btn btn-outline-dark btn-sm" id="comment-create-btn">등록 완료</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 {{>layouts/footer}}
 
@@ -161,5 +210,26 @@
         const searchTerm = document.getElementById('searchInput').value;
         fetchParts(searchTerm, currentPage);
     });
+
+    {
+        // 모달 요소 선택
+        const commentEditModal = document.querySelector("#comment-create-modal");
+        // 모달 이벤트 감지
+        commentEditModal.addEventListener("show.bs.modal", function(event) {
+            // 트리거 버튼 선택
+            const triggerBtn = event.relatedTarget;
+            // 데이터 가져오기
+            const id = triggerBtn.getAttribute("data-bs-id");
+            const nickname = triggerBtn.getAttribute("data-bs-nickname");
+            const body = triggerBtn.getAttribute("data-bs-body");
+            const articleId = triggerBtn.getAttribute("data-bs-article-id");
+            //console.log(`${id}, ${nickname}, ${body}, ${articleId}`);
+            // 데이터를 반영
+            document.querySelector("#edit-comment-nickname").value = nickname;
+            document.querySelector("#edit-comment-body").value = body;
+            document.querySelector("#edit-comment-id").value = id;
+            document.querySelector("#edit-comment-article-id").value = articleId;
+        });
+    }
 
 </script>

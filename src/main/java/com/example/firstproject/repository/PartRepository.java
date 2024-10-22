@@ -2,13 +2,13 @@ package com.example.firstproject.repository;
 
 
 import com.example.firstproject.entity.Part;
+import com.example.firstproject.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public interface PartRepository extends JpaRepository<Part, Long> {
     @Query(value =
@@ -26,4 +26,7 @@ public interface PartRepository extends JpaRepository<Part, Long> {
             "OR part_std like ?1 ",
             nativeQuery = true)
     Page<Part> findBySearch(String searchTerm, Pageable pageable);
+
+    @Query("SELECT p FROM Part p WHERE p.part_code = :partCode")
+    Part findByPartCode(@Param("partCode") String partCode);
 }

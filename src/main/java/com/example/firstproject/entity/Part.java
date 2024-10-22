@@ -1,7 +1,11 @@
 package com.example.firstproject.entity;
 
+import com.example.firstproject.dto.PartDto;
+import com.example.firstproject.dto.RegisterDto;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -23,5 +27,26 @@ public class Part {
 
     @Column(name = "part_std", length = 100, nullable = false)
     private String part_std;
+
+    private UUID skey;
+
+    // 회원가입
+    public static Part createPart(PartDto dto) {
+        // 예외 발생
+        // 엔티티 생성 및 반환
+        return new Part(
+                dto.getPart_code(),
+                dto.getPart_name(),
+                dto.getPart_std(),
+                dto.getSkey()
+        );
+    }
+
+    @PrePersist
+    public void generateUUID() {
+        if (this.skey == null) {
+            this.skey = UUID.randomUUID(); // UUID 생성
+        }
+    }
 
 }

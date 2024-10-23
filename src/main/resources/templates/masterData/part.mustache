@@ -22,7 +22,7 @@
     </thead>
     <tbody id="partTableBody">
     {{#part}}
-        <tr>
+        <tr data-bs-toggle="modal" data-bs-target="#comment-update-modal" data-part_code="{{part_code}}" data-part_name="{{part_name}}" data-part_std="{{part_std}}">
             <th>{{part_code}}</th>
             <td>{{part_name}}</td>
             <td>{{part_std}}</td>
@@ -93,6 +93,43 @@
     </div>
 </div>
 
+<!-- 수정 Modal -->
+<div class="modal fade" id="comment-update-modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">품번 등록</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- 댓글 수정 폼-->
+                <form>
+                    <!-- 품번 입력 -->
+                    <div class="mb-3">
+                        <label class="form-label">품번</label>
+                        <input type="text" class="form-control form-control-sm" id="update-partcode">
+                    </div>
+                    <!-- 품명 입력 -->
+                    <div class="mb-3">
+                        <label class="form-label">품명</label>
+                        <input type="text" class="form-control form-control-sm" id="update-partname">
+                    </div>
+                    <!-- 규격 입력 -->
+                    <div class="mb-3">
+                        <label class="form-label">규격</label>
+                        <input type="text" class="form-control form-control-sm" id="update-partstd">
+                    </div>
+                    <!-- 히든 인풋 -->
+                    <input type="hidden" id="edit-comment-id">
+                    <input type="hidden" id="edit-comment-article-id">
+                    <!-- 전송 버튼 -->
+                    <button type="button" class="btn btn-outline-dark btn-sm" id="comment-update-btn">등록 완료</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 {{>layouts/footer}}
 
 <script>
@@ -123,12 +160,12 @@
                     // 받아온 데이터로 테이블 업데이트
                     data.content.forEach(part => {
                         const row = `
-                    <tr>
-                        <th>${part.part_code}</th>
-                        <td>${part.part_name}</td>
-                        <td>${part.part_std}</td>
-                    </tr>
-                `;
+                            <tr data-bs-toggle="modal" data-bs-target="#comment-update-modal" data-partcode="${part.part_code}" data-partname="${part.part_code}" data-partstd="${part.part_std}">
+                                <th>${part.part_code}</th>
+                                <td>${part.part_name}</td>
+                                <td>${part.part_std}</td>
+                            </tr>
+                        `;
                         tbody.innerHTML += row;
                     });
 
@@ -206,6 +243,7 @@
         fetchParts(searchTerm, currentPage);
     });
 
+    // 등록버튼 클릭
     {
         // 모달 요소 선택
         const commentEditModal = document.querySelector("#comment-create-modal");
@@ -213,17 +251,6 @@
         commentEditModal.addEventListener("show.bs.modal", function(event) {
             // 트리거 버튼 선택
             const triggerBtn = event.relatedTarget;
-            // 데이터 가져오기
-            const id = triggerBtn.getAttribute("data-bs-id");
-            const nickname = triggerBtn.getAttribute("data-bs-nickname");
-            const body = triggerBtn.getAttribute("data-bs-body");
-            const articleId = triggerBtn.getAttribute("data-bs-article-id");
-            //console.log(`${id}, ${nickname}, ${body}, ${articleId}`);
-            // 데이터를 반영
-            document.querySelector("#edit-comment-nickname").value = nickname;
-            document.querySelector("#edit-comment-body").value = body;
-            document.querySelector("#edit-comment-id").value = id;
-            document.querySelector("#edit-comment-article-id").value = articleId;
         });
     }
 
@@ -257,6 +284,54 @@
                 }
             }).catch(error => {
                 console.error("Error occurred:", error);
+            });
+        });
+    }
+
+    <!-- 품번 수정 -->
+    {
+        // 수정할 데이터 클릭 시
+        const exampleModal = document.getElementById('comment-update-modal');
+        exampleModal.addEventListener('show.bs.modal', function (event) {
+            // Button that triggered the modal
+            const button = event.relatedTarget;
+            // Extract info from data-* attributes
+            const partcode = button.getAttribute('data-partcode');
+            const partname = button.getAttribute('data-partname');
+            const partstd = button.getAttribute('data-partstd');
+
+            // 데이터를 반영
+            document.querySelector("#update-partcode").value = partcode;
+            document.querySelector("#update-partname").value = partname;
+            document.querySelector("#update-partstd").value = partstd;
+
+        });
+
+        // 수정 완료 버튼
+        const commentUpdateBtn = document.querySelector("#comment-update-btn");
+        // 클릭 이벤트 처리
+        commentUpdateBtn.addEventListener("click", function() {
+            // 수정 댓글 객체 생성
+            const part = {
+                partcode: document.querySelector("#update-partcode").value,
+                partname: document.querySelector("#update-partname").value,
+                partstd: document.querySelector("#update-partstd").value,
+            };
+            console.log(part);
+            // 수정 REST API 호출 - fetch()
+            const url = "/api/comments/" + part.partcode;
+            fetch(url, {
+                method: "PATCH",
+                body: JSON.stringify(part),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then(response => {
+                // http 응답 코드에 따른 메시지 출력
+                const msg = (response.ok) ? "댓글이 수정 되었습니다." : "댓글 수정 실패..!";
+                alert(msg);
+                // 현재 페이지를 새로고침
+                window.location.reload();
             });
         });
     }

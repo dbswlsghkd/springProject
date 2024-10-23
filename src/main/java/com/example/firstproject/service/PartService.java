@@ -1,7 +1,9 @@
 package com.example.firstproject.service;
 
+import com.example.firstproject.dto.CommentDto;
 import com.example.firstproject.dto.PartDto;
 import com.example.firstproject.dto.RegisterDto;
+import com.example.firstproject.entity.Comment;
 import com.example.firstproject.entity.Part;
 import com.example.firstproject.entity.Users;
 import com.example.firstproject.repository.PartRepository;
@@ -49,6 +51,19 @@ public class PartService {
             log.info("품번이 존재합니다.");
             return null;
         }
+    }
+
+    @Transactional
+    public PartDto update(String partcode, PartDto dto) {
+        // 댓글 조회 및 예외 발생
+        Part target = partRepository.findPartCode(partcode)
+                .orElseThrow(() -> new IllegalArgumentException("품번 수정 실패! 대상 품번이 없습니다."));
+        // 댓글 수정
+        target.patch(dto);
+        // DB로 갱신
+        Part updated = partRepository.save(target);
+        // 댓글 엔티티를 DTO로 변환 및 반환
+        return PartDto.createPartDto(updated);
     }
 
 }

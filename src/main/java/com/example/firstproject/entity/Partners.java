@@ -1,5 +1,7 @@
 package com.example.firstproject.entity;
 
+import com.example.firstproject.dto.PartDto;
+import com.example.firstproject.dto.PartnersDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -26,5 +28,16 @@ public class Partners {
 
     @Column(name = "partner_address", length = 200, nullable = false)
     private String partner_address;
+
+    // 거래처 등록
+    public static Partners createPart(PartnersDto dto) {
+        // 예외 발생
+        // 엔티티 생성 및 반환
+        return new Partners(
+                dto.getPartner_code(),
+                dto.getPartner_name(),
+                dto.getPartner_address()
+        );
+    }
 
 }

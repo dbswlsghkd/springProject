@@ -1,5 +1,7 @@
 package com.example.firstproject.api;
 
+import com.example.firstproject.dto.PartDto;
+import com.example.firstproject.dto.PartnersDto;
 import com.example.firstproject.entity.Part;
 import com.example.firstproject.entity.Partners;
 import com.example.firstproject.service.PartService;
@@ -9,9 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,5 +40,16 @@ public class PartnersApiController {
         }
 
         return partnersService.index(pageable); // 전체 Part를 페이징 처리
+    }
+
+    // 거래처 등록
+    @PostMapping("/api/partners/create")
+    public ResponseEntity<PartnersDto> create(@RequestBody PartnersDto dto) {
+        // 서비스에게 위임
+        PartnersDto createdDto = partnersService.create(dto);
+        // 결과 응답
+        return (createdDto != null) ?
+                ResponseEntity.status(HttpStatus.OK).body(createdDto) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 }

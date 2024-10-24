@@ -31,6 +31,10 @@ public class PartnersService {
         return partnersRepository.findBySearch(searchPattern, pageable);
     }
 
+    public String getMaxPartnerCode() {
+        return partnersRepository.findMaxPartnerCode();
+    }
+
     @Transactional
     public PartnersDto create(PartnersDto dto) {
         // 품번 조회 및 예외 발생

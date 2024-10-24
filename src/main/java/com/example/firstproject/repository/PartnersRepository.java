@@ -30,5 +30,9 @@ public interface PartnersRepository extends JpaRepository<Partners, String> {
     @Query(value = "SELECT * FROM partner WHERE partner_code = :partnersCode", nativeQuery = true)
     Partners findByPartnersCode(@Param("partnersCode") String partnersCode);
 
+    // partner_code의 최대값을 조회하는 메서드
+    @Query(value = "SELECT MAX(p.partner_code) FROM partner p", nativeQuery = true)
+    String findMaxPartnerCode();
+
 }
 

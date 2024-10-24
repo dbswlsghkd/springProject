@@ -214,6 +214,14 @@
         commentEditModal.addEventListener("show.bs.modal", function(event) {
             // 트리거 버튼 선택
             const triggerBtn = event.relatedTarget;
+            // partner_code의 최대값 조회
+            fetch("/api/partners/max-code")
+                    .then(response => response.text())
+                    .then(maxCode => {
+                        // 최대값을 받아와서 입력 필드에 자동으로 입력
+                        document.querySelector("#create-comment-partnercode").value = Number(maxCode)+1;
+                    })
+                    .catch(error => console.error('Error fetching max partner_code:', error));
         });
     }
 

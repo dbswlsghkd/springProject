@@ -42,6 +42,12 @@ public class PartnersApiController {
         return partnersService.index(pageable); // 전체 Part를 페이징 처리
     }
 
+    // 거래처 코드 MAx값 가져오기
+    @GetMapping("/api/partners/max-code")
+    public String getMaxPartnerCode() {
+        return partnersService.getMaxPartnerCode();
+    }
+
     // 거래처 등록
     @PostMapping("/api/partners/create")
     public ResponseEntity<PartnersDto> create(@RequestBody PartnersDto dto) {

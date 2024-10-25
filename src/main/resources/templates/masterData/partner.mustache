@@ -22,7 +22,7 @@
     </thead>
     <tbody id="partnerTableBody">
     {{#partners}}
-        <tr>
+        <tr data-bs-toggle="modal" data-bs-target="#comment-update-modal" data-partnercode="{{partner_code}}" data-partnername="{{partner_name}}" data-partneraddress="{{partner_address}}">
             <th>{{partner_code}}</th>
             <td>{{partner_name}}</td>
             <td>{{partner_address}}</td>
@@ -93,6 +93,40 @@
     </div>
 </div>
 
+<!-- 수정 Modal -->
+<div class="modal fade" id="comment-update-modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">거래처 수정</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- 댓글 수정 폼-->
+                <form>
+                    <!-- 품번 입력 -->
+                    <div class="mb-3">
+                        <label class="form-label">거래처코드</label>
+                        <input type="text" class="form-control form-control-sm" id="update-partnercode">
+                    </div>
+                    <!-- 품명 입력 -->
+                    <div class="mb-3">
+                        <label class="form-label">거래처명</label>
+                        <input type="text" class="form-control form-control-sm" id="update-partnername">
+                    </div>
+                    <!-- 규격 입력 -->
+                    <div class="mb-3">
+                        <label class="form-label">주소</label>
+                        <input type="text" class="form-control form-control-sm" id="update-partneraddress">
+                    </div>
+                    <!-- 전송 버튼 -->
+                    <button type="button" class="btn btn-outline-dark btn-sm" id="comment-update-btn">등록 완료</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 {{>layouts/footer}}
 
 <script>
@@ -123,7 +157,7 @@
                     // 받아온 데이터로 테이블 업데이트
                     data.content.forEach(partners => {
                         const row = `
-                    <tr>
+                    <tr data-bs-toggle="modal" data-bs-target="#comment-update-modal" data-partnercode="${partners.partner_code}" data-partnername="${partners.partner_name}" data-partneraddress="${partners.partner_address}">
                         <th>${partners.partner_code}</th>
                         <td>${partners.partner_name}</td>
                         <td>${partners.partner_address}</td>
@@ -255,6 +289,55 @@
                 }
             }).catch(error => {
                 console.error("Error occurred:", error);
+            });
+        });
+    }
+
+    <!-- 품번 수정 -->
+    {
+        // 수정할 데이터 클릭 시
+        const exampleModal = document.getElementById('comment-update-modal');
+        exampleModal.addEventListener('show.bs.modal', function (event) {
+            // Button that triggered the modal
+            const button = event.relatedTarget;
+            // Extract info from data-* attributes
+            const partnercode = button.getAttribute('data-partnercode');
+            const partnername = button.getAttribute('data-partnername');
+            const partneraddress = button.getAttribute('data-partneraddress');
+
+            // 데이터를 반영
+            document.querySelector("#update-partnercode").value = partnercode;
+            document.querySelector("#update-partnername").value = partnername;
+            document.querySelector("#update-partneraddress").value = partneraddress;
+
+        });
+
+        // 수정 완료 버튼
+        const commentUpdateBtn = document.querySelector("#comment-update-btn");
+        // 클릭 이벤트 처리
+        commentUpdateBtn.addEventListener("click", function() {
+            // 수정 댓글 객체 생성
+            const partners = {
+                partner_code: document.querySelector("#update-partnercode").value,
+                partner_name: document.querySelector("#update-partnername").value,
+                partner_address: document.querySelector("#update-partneraddress").value,
+            };
+            console.log(partners);
+            // console.log(part.part_code);
+            // 수정 REST API 호출 - fetch()
+            const url = "/api/partners/update/" + encodeURIComponent(partners.partner_code);
+            fetch(url, {
+                method: "PATCH",
+                body: JSON.stringify(partners),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then(response => {
+                // http 응답 코드에 따른 메시지 출력
+                const msg = (response.ok) ? "거래처가 수정 되었습니다." : "거래처 수정 실패..!";
+                alert(msg);
+                // 현재 페이지를 새로고침
+                window.location.reload();
             });
         });
     }

@@ -40,4 +40,17 @@ public class Partners {
         );
     }
 
+    public void patch(PartnersDto dto) {
+        // 예외 발생
+        // System.out.println("this =====> " + this.part_code + " dto =====>" + dto.getPart_code());
+
+        if (!this.partner_code.equals(dto.getPartner_code()))
+            throw new IllegalArgumentException("거래처 수정 실패! 잘못된 거래처가 입력되었습니다.");
+        // 객체를 갱신
+        if (dto.getPartner_name() != null)
+            this.partner_name = dto.getPartner_name();
+        if (dto.getPartner_address() != null)
+            this.partner_address = dto.getPartner_address();
+    }
+
 }

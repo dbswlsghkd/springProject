@@ -58,4 +58,17 @@ public class PartnersApiController {
                 ResponseEntity.status(HttpStatus.OK).body(createdDto) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+
+    // 품번 수정
+    // @RequestBody는 PartDto의 변수와 json으로 넘어오는 변수가 동일해야함
+    @PatchMapping("/api/partners/update/{partner_code}")
+    public ResponseEntity<PartnersDto> update(@PathVariable String partner_code,
+                                          @RequestBody PartnersDto dto) {
+        log.info(partner_code + "=--------> partner_code");
+        log.info(dto + "=--------> dto");
+        // 서비스에게 위임
+        PartnersDto updatedDto = partnersService.update(partner_code, dto);
+        // 결과 응답
+        return ResponseEntity.status(HttpStatus.OK).body(updatedDto);
+    }
 }

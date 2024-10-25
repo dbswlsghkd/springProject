@@ -55,4 +55,17 @@ public class PartnersService {
             return null;
         }
     }
+
+    @Transactional
+    public PartnersDto update(String partner_code, PartnersDto dto) {
+        // 댓글 조회 및 예외 발생
+        Partners target = partnersRepository.findPartnersCode(partner_code)
+                .orElseThrow(() -> new IllegalArgumentException("거래처 수정 실패! 대상 거래처가 없습니다."));
+        // 댓글 수정
+        target.patch(dto);
+        // DB로 갱신
+        Partners updated = partnersRepository.save(target);
+        // 댓글 엔티티를 DTO로 변환 및 반환
+        return PartnersDto.createPartnersDto(updated);
+    }
 }

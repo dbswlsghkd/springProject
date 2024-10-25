@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PartnersRepository extends JpaRepository<Partners, String> {
     @Query(value =
@@ -33,6 +34,9 @@ public interface PartnersRepository extends JpaRepository<Partners, String> {
     // partner_code의 최대값을 조회하는 메서드
     @Query(value = "SELECT MAX(p.partner_code) FROM partner p", nativeQuery = true)
     String findMaxPartnerCode();
+
+    @Query(value = "SELECT * FROM partner WHERE partner_code = ?1" , nativeQuery = true)
+    Optional<Partners> findPartnersCode(String partnersCode);
 
 }
 

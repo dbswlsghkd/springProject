@@ -12,7 +12,7 @@ import java.util.List;
 @Slf4j
 public class CustomUserDetails implements UserDetails {
 
-    private Users users;
+    private final Users users;
 
     public CustomUserDetails(Users users) {
         log.info("Inside CustomUserDetails constructor ========> " + users);

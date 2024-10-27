@@ -28,7 +28,8 @@
                     maxlength="30"
             />
             <input id="psword" name="psword" type="password" placeholder="비밀번호" />
-            <p id="button" onclick="document.querySelector('.login-form').submit()">login</p>
+            <button type="submit" id="button">Login</button>
+<!--            <p id="button" onclick="document.querySelector('.login-form').submit()">login</p>-->
             <!--            <input id="submit" type="submit" value="Login" />-->
             <p class="message">
                 Not registered?
@@ -40,42 +41,44 @@
 </body>
 </html>
 <Script>
+
     <!-- 아이디, 비밀번호 조회 -->
-    {
-        // 수정 완료 버튼
-        const loginBtn = document.querySelector("#button");
-        // 클릭 이벤트 처리
-        loginBtn.addEventListener("click", function() {
-            // 수정 댓글 객체 생성
-            const LoginData = {
-                userid: document.querySelector("#id").value,
-                psword: document.querySelector("#psword").value
-            };
-            // return;
-            // 수정 REST API 호출 - fetch()
-            const url = "/login"
-            fetch(url, {
-                method: "POST",
-                body: JSON.stringify(LoginData),
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
-                    .then(res => {
-                        console.log(res);
-                        if (res.ok) {
-                            location.href = "/articles";
-                            alert("로그인 성공");
-                        } else {
-                            location.href = "/login";
-                            alert("아이디와 비밀번호를 확인해주세요.");
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Error occurred:", error);
-                    });
-        });
-    }
+    // JS로 API 호출 방식
+    // {
+    //     // 수정 완료 버튼
+    //     const loginBtn = document.querySelector("#button");
+    //     // 클릭 이벤트 처리
+    //     loginBtn.addEventListener("click", function() {
+    //         // 수정 댓글 객체 생성
+    //         const LoginData = {
+    //             userid: document.querySelector("#id").value,
+    //             psword: document.querySelector("#psword").value
+    //         };
+    //         // return;
+    //         // 수정 REST API 호출 - fetch()
+    //         const url = "/login"
+    //         fetch(url, {
+    //             method: "POST",
+    //             body: JSON.stringify(LoginData),
+    //             headers: {
+    //                 "Content-Type": "application/json"
+    //             }
+    //         })
+    //                 .then(res => {
+    //                     console.log(res);
+    //                     if (res.ok) {
+    //                         location.href = "/articles";
+    //                         alert("로그인 성공");
+    //                     } else {
+    //                         location.href = "/login";
+    //                         alert("아이디와 비밀번호를 확인해주세요.");
+    //                     }
+    //                 })
+    //                 .catch(error => {
+    //                     console.error("Error occurred:", error);
+    //                 });
+    //     });
+    // }
 </script>
 
 <!-- Copyright (c) 2024 by Aigars Silkalns (https://codepen.io/colorlib/pen/rxddKy) -->

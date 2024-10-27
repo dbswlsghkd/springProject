@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -22,7 +23,24 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        //
+        // csrf disable
+        http
+                .csrf((auth) -> auth.disable());
+        // form 로그인 방식 disable
+        http
+                .formLogin((auth) -> auth.disable());
+
+        // http basic 인증 방식 disable
+        http
+                .httpBasic((auth) -> auth.disable());
+
+        // 세션 설정
+        http
+                .sessionManagement((session) -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+
+        // security seesion
         // http    //특정한 경로에 허용, 거부 가능(람다식으로 작성해야함)
         //         .authorizeRequests((auth) -> auth
         //                 // 정적 리소스 허용 (css, js 등)
@@ -49,8 +67,8 @@ public class SecurityConfig {
         //         .logout((auth) -> auth.permitAll());  // 로그아웃 허용
 
         //
-        http
-                .csrf((auth) -> auth.disable());
+        // http
+        //         .csrf((auth) -> auth.disable());
 
         return http.build();
     }

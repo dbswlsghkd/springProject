@@ -1,5 +1,6 @@
 package com.example.firstproject.config;
 
+import com.example.firstproject.jwt.JWTFilter;
 import com.example.firstproject.jwt.JWTUtil;
 import com.example.firstproject.jwt.LoginFilter;
 import org.springframework.context.annotation.Bean;
@@ -65,6 +66,9 @@ public class SecurityConfig {
                 // 그 외 막지 못하는 경우 로그인을 통해 접근할 수 있도록 설정
                 .anyRequest().authenticated()
             );
+
+        http
+                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 
         // 세션 설정
         http

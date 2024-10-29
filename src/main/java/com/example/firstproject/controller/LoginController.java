@@ -28,10 +28,10 @@ public class LoginController {
     private LoginService loginService;
 
 
-    @GetMapping("/")
-    public String index(Model model) {
-        return "login/login";
-    }
+    // @GetMapping("/")
+    // public String index(Model model) {
+    //     return "login/login";
+    // }
 
     @GetMapping("/register")
     public String register(Model model) {
@@ -44,9 +44,9 @@ public class LoginController {
     }
 
     // spring security 사용 하면 해당 부분은 필요가 없음
-    @PostMapping("/login")
-    public String login(@RequestBody LoginDto dto, HttpSession session) {
-        List<LoginDto> loginDtos = loginService.logins(dto);
+    // @PostMapping("/login")
+    // public String login(@RequestBody LoginDto dto, HttpSession session) {
+    //     List<LoginDto> loginDtos = loginService.logins(dto);
 
         // try {
         //     loginDtos = loginService.logins(dto);
@@ -57,7 +57,7 @@ public class LoginController {
         // }
 
 
-        return "/";
+        // return "/";
         // log.info("loginDtos ====>" + loginDtos);
         // if(loginDtos != null && !loginDtos.isEmpty()) {
         //     log.info("로그인 성공");
@@ -71,7 +71,7 @@ public class LoginController {
         // }
 
         // return ResponseEntity.ok(loginDtos);
-    }
+    // }
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<String> handleEntityNotFoundException(EntityNotFoundException ex) {

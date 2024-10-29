@@ -54,21 +54,23 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String role = auth.getAuthority();
 
+        log.info(role + "===================> JWTUtill의 role");
+
         String token = jwtUtil.createJwt(username, role, 60*60*10L);
+        res.addHeader("Authorization", "Bearer " + token);
 
-
-
+        log.info("token ===============> " + token);
         log.info("successful authentication");
         // 응답이 커밋되지 않았는지 확인 후 리다이렉트 처리
-        try {
-            if (!res.isCommitted()) {
-                res.addHeader("Authorization", "Bearer " + token);
-                res.sendRedirect("/articles?loginSuccess=true"); // 로그인 성공 후 이동할 페이지
-            }
-        } catch (IOException | java.io.IOException e) {
-            log.error("Redirection failed: ", e);
-            throw new ServletException("Redirection failed", e);
-        }
+        // try {
+        //     if (!res.isCommitted()) {
+        //         res.addHeader("Authorization", "Bearer " + token);
+        //         res.sendRedirect("/articles"); // 로그인 성공 후 이동할 페이지
+        //     }
+        // } catch (IOException | java.io.IOException e) {
+        //     log.error("Redirection failed: ", e);
+        //     throw new ServletException("Redirection failed", e);
+        // }
     }
 
     @Override

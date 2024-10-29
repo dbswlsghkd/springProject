@@ -42,7 +42,7 @@
             <p id="button">SIGN UP</p>
             <p class="message">
                 Already registered?
-                <a href="/">login</a>
+                <a href="/login">login</a>
             </p>
         </form>
     </div>
@@ -74,7 +74,7 @@
             }).then(res => {
                 // http 응답 코드에 따른 메시지 출력
                 if (res.ok) {
-                    location.href = "/";
+                    location.href = "/login";
                 } else {
                     alert("회원가입 실패하였습니다.!");
                 }

@@ -3,6 +3,7 @@ package com.example.firstproject.config;
 import com.example.firstproject.jwt.JWTFilter;
 import com.example.firstproject.jwt.JWTUtil;
 import com.example.firstproject.jwt.LoginFilter;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +14,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
@@ -40,7 +45,26 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
+        // 프론트쪽 cors 문제 해결 (react, vue 등 프론트엔드가 같이 구현된 경우 사용
+        // http
+        //         .cors((corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
+        //
+        //             @Override
+        //             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+        //
+        //                 CorsConfiguration configuration = new CorsConfiguration();
+        //
+        //                 configuration.setAllowedOrigins(Collections.singletonList("http://localhost:8081"));
+        //                 configuration.setAllowedMethods(Collections.singletonList("*"));
+        //                 configuration.setAllowCredentials(true);
+        //                 configuration.setAllowedHeaders(Collections.singletonList("*"));
+        //                 configuration.setMaxAge(3600L);
+        //
+        //                 configuration.setExposedHeaders(Collections.singletonList("Authorization"));
+        //
+        //                 return configuration;
+        //             }
+        //         })));
         // csrf disable
         http
                 .csrf((auth) -> auth.disable());
@@ -58,7 +82,7 @@ public class SecurityConfig {
                 .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                 // root, login 페이지에서 특정한 작업을 실행하려고 할 때
                 // 모든 사용자가 로그인 하지 않아도 접근 가능하도록 permitAll
-                .requestMatchers("/", "/login", "/register", "/articles", "/api/register").permitAll()
+                .requestMatchers("/", "/login", "/register", "/articles/**", "/api/register").permitAll()
                 // .requestMatchers("/articles").authenticated()  // 인증된 사용자만 접근 가능
                 .requestMatchers("/parts").hasRole("ADMIN")
                 // 와일드 카드를 통해 여러 유저 접근
@@ -70,15 +94,15 @@ public class SecurityConfig {
         http
                 .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 
-        // 세션 설정
-        http
-                .sessionManagement((session) -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
-                        // .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
         // 로그인 필터 적용
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
+
+        // 세션 설정
+        http
+                .sessionManagement((session) -> session
+                        // .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         // security seesion
         // http    //특정한 경로에 허용, 거부 가능(람다식으로 작성해야함)

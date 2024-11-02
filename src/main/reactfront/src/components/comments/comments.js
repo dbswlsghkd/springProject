@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import CommentsList from './CommentsList'; // 댓글 목록 컴포넌트
-import NewComment from './CommentsNew'; // 새 댓글 작성 컴포넌트
+import CommentsList from './commentsList'; // 댓글 목록 컴포넌트
+import NewComment from './commentsNew'; // 새 댓글 작성 컴포넌트
 
 const Comments = ({ articleId }) => {
     const [comments, setComments] = useState([]); // 댓글 상태

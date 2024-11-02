@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams, useHistory } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import Header from '../layouts/Header';
 import Footer from '../layouts/Footer';
-import Comments from '../comments/Comments'; // 댓글 컴포넌트 import
+import Comments from '../comments/comments'; // 댓글 컴포넌트 import
 
 const ArticleDetail = () => {
     const { id } = useParams(); // URL에서 ID 파라미터 가져오기
     const [article, setArticle] = useState(null); // 기사 상태
-    const history = useHistory(); // history 객체로 리디렉션 처리
+    const navigate = useNavigate();
 
     useEffect(() => {
         // 기사 데이터 Fetch
-        fetch(`/api/articles/${id}`) // 실제 API 엔드포인트로 수정
+        fetch(`/articles/${id}/edit`) // 실제 API 엔드포인트로 수정
             .then(response => response.json())
             .then(data => setArticle(data))
             .catch(error => console.error('Error fetching article:', error));
@@ -19,11 +19,11 @@ const ArticleDetail = () => {
 
     const handleDelete = () => {
         // 기사 삭제 처리
-        fetch(`/api/articles/${id}`, { method: 'DELETE' })
+        fetch(`/articles/${id}/delete`, { method: 'DELETE' })
             .then(response => {
                 if (response.ok) {
                     // 삭제 성공 시 목록 페이지로 리디렉션
-                    history.push('/articles');
+                    navigate('/articles');
                 } else {
                     console.error('Failed to delete article');
                 }
@@ -35,7 +35,7 @@ const ArticleDetail = () => {
 
     return (
         <>
-            <Header />
+            <Header>
             {/* 수정 링크 */}
             <Link to={`/articles/${article.id}/edit`} className="btn btn-primary mb-3">Edit</Link>
             {/* 삭제 링크 */}
@@ -61,6 +61,7 @@ const ArticleDetail = () => {
 
             {/* 댓글 컴포넌트 삽입 */}
             <Comments articleId={article.id} />
+            </Header>
             <Footer />
         </>
     );

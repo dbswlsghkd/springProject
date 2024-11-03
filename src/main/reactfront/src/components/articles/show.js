@@ -23,6 +23,7 @@ const ArticleDetail = () => {
             .then(response => {
                 if (response.ok) {
                     // 삭제 성공 시 목록 페이지로 리디렉션
+                    alert(`${id}가 삭제되었습니다.`)
                     navigate('/articles');
                 } else {
                     console.error('Failed to delete article');

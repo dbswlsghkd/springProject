@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate} from 'react-router-dom';
 import Header from '../layouts/Header';
 import Footer from '../layouts/Footer';
 
 const EditArticle = () => {
     const { id } = useParams(); // URL에서 id 가져오기
     const [article, setArticle] = useState(null); // 상태 관리
+    const navigate = useNavigate();
 
     useEffect(() => {
         // 특정 기사를 가져오기 위한 API 요청
@@ -40,9 +41,8 @@ const EditArticle = () => {
         })
             .then(response => {
                 if (response.ok) {
-                    console.log(response.ok);
                     // 업데이트 성공 시 리디렉션 또는 처리
-                    window.location.href = `/articles/${id}`; // 수정된 기사 페이지로 리디렉션
+                    navigate(`/articles/${id}`); // 수정된 기사 페이지로 리디렉션
                 } else {
                     console.error('Failed to update article');
                 }

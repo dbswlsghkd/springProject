@@ -20,15 +20,19 @@ const NewComment = ({ articleId, setComments }) => {
                 'Content-Type': 'application/json',
             },
         })
-            .then(response => {
-                const msg = response.ok ? '댓글이 등록되었습니다.' : '댓글 등록 실패..!';
-                alert(msg);
-                if (response.ok) {
-                    // 댓글이 성공적으로 등록되면 상태 업데이트
-                    setComments(prevComments => [...prevComments, comment]);
-                    setNickname(''); // 닉네임 필드 초기화
-                    setBody(''); // 댓글 본문 필드 초기화
-                }
+            .then(res => res.json()) // 'response' 대신 'res' 사용
+            .then(data => {
+                // console.log(data);
+                // if (data.success) { // 성공 여부를 확인하는 로직에 맞게 수정
+                    alert('댓글이 등록되었습니다.');
+                    // 서버에서 받은 댓글 ID를 사용하여 상태 업데이트
+                    setComments(prevComments => [...prevComments, { ...comment, id: data.id }]);
+                    setNickname(''); // 필드 초기화
+                    setBody(''); // 필드 초기화
+                // }
+                // else {
+                //     alert('댓글 등록 실패..!');
+                // }
             })
             .catch(error => {
                 console.error('Error creating comment:', error);

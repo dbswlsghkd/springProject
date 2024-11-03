@@ -1,8 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState  } from 'react';
 
 const CommentList = ({ comments, setComments }) => {
+    const [isDeleting, setIsDeleting] = useState(false); // 삭제 상태를 관리하는 state 추가
     const handleCommentDelete = (commentId) => {
+        if (isDeleting) return; // 이미 삭제 요청 중일 경우 처리 중단
+
         const url = `/api/comments/${commentId}`;
+        setIsDeleting(true); // 삭제 요청 시작
         fetch(url, {
             method: 'DELETE',
         })
@@ -11,13 +15,15 @@ const CommentList = ({ comments, setComments }) => {
                     alert('댓글 삭제 실패..!');
                     return;
                 }
-                // 삭제 성공 시 댓글 목록에서 제거
                 setComments(prevComments => prevComments.filter(comment => comment.id !== commentId));
             })
             .catch(error => {
                 console.error('Error deleting comment:', error);
                 alert('댓글 삭제 중 오류가 발생했습니다.');
-            });
+            })
+            .finally(() => {
+            setIsDeleting(false); // 삭제 요청 종료
+        });
     };
 
     return (
@@ -42,6 +48,7 @@ const CommentList = ({ comments, setComments }) => {
                             type="button"
                             className="btn btn-sm btn-outline-danger comment-delete-btn"
                             onClick={() => handleCommentDelete(comment.id)}
+                            disabled={isDeleting} // 삭제 중일 때 버튼 비활성화
                         >
                             삭제
                         </button>
@@ -56,7 +63,6 @@ const CommentList = ({ comments, setComments }) => {
     );
 };
 
-// 댓글 수정 모달 컴포넌트
 const CommentEditModal = () => {
     const [editComment, setEditComment] = React.useState({
         id: '',
@@ -65,15 +71,27 @@ const CommentEditModal = () => {
         articleId: '',
     });
 
-    const handleModalShow = (event) => {
-        const triggerBtn = event.relatedTarget;
-        setEditComment({
-            id: triggerBtn.getAttribute('data-bs-id'),
-            nickname: triggerBtn.getAttribute('data-bs-nickname'),
-            body: triggerBtn.getAttribute('data-bs-body'),
-            articleId: triggerBtn.getAttribute('data-bs-article-id'),
-        });
-    };
+    useEffect(() => {
+        const modal = document.getElementById('comment-edit-modal');
+
+        // Bootstrap 모달의 `show.bs.modal` 이벤트에 handleModalShow 연결
+        const handleModalShow = (event) => {
+            const triggerBtn = event.relatedTarget;
+            setEditComment({
+                id: triggerBtn.getAttribute('data-bs-id'),
+                nickname: triggerBtn.getAttribute('data-bs-nickname'),
+                body: triggerBtn.getAttribute('data-bs-body'),
+                articleId: triggerBtn.getAttribute('data-bs-article-id'),
+            });
+        };
+
+        modal.addEventListener('show.bs.modal', handleModalShow);
+
+        // 클린업 함수: 컴포넌트가 언마운트될 때 이벤트 리스너 제거
+        return () => {
+            modal.removeEventListener('show.bs.modal', handleModalShow);
+        };
+    }, []);
 
     const handleCommentUpdate = () => {
         const url = `/api/comments/${editComment.id}`;
@@ -87,7 +105,6 @@ const CommentEditModal = () => {
             .then(response => {
                 const msg = response.ok ? '댓글이 수정되었습니다.' : '댓글 수정 실패..!';
                 alert(msg);
-                // 수정 후, 모달 닫기 및 페이지 새로고침
                 window.location.reload();
             })
             .catch(error => {
@@ -97,7 +114,7 @@ const CommentEditModal = () => {
     };
 
     return (
-        <div className="modal fade" id="comment-edit-modal" tabIndex="-1" onShow={handleModalShow}>
+        <div className="modal fade" id="comment-edit-modal" tabIndex="-1">
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">

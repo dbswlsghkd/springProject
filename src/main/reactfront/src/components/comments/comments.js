@@ -16,7 +16,7 @@ const Comments = ({ articleId }) => {
     return (
         <div>
             {/* 댓글 목록 */}
-            <CommentsList comments={comments} />
+            <CommentsList comments={comments} setComments={setComments} />
             {/* 새 댓글 작성 */}
             <NewComment articleId={articleId} setComments={setComments} />
         </div>

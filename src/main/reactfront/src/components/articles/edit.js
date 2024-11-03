@@ -9,23 +9,38 @@ const EditArticle = () => {
 
     useEffect(() => {
         // 특정 기사를 가져오기 위한 API 요청
-        fetch(`/api/articles/${id}`) // 실제 API 엔드포인트로 수정
-            .then(response => response.json())
-            .then(data => setArticle(data))
+        fetch(`/articles/${id}/edit`)
+            .then(response => {
+                console.log("Fetch response:", response); // 응답 상태 확인
+                if (!response.ok) throw new Error("Failed to fetch article");
+                return response.json();
+            })
+            .then(data => {
+                console.log("Article data:", data); // 데이터 확인
+                setArticle(data);
+            })
             .catch(error => console.error('Error fetching article:', error));
     }, [id]);
 
     const handleSubmit = (e) => {
         e.preventDefault(); // 기본 폼 제출 동작 방지
-        const formData = new FormData(e.target); // 폼 데이터 가져오기
+        const articleData = {
+            id: article.id,
+            title: e.target.title.value,
+            content: e.target.content.value,
+        };
 
         // 기사 업데이트 API 요청
-        fetch('/api/articles/update', {
+        fetch('/articles/update', {
             method: 'POST',
-            body: formData,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(articleData),
         })
             .then(response => {
                 if (response.ok) {
+                    console.log(response.ok);
                     // 업데이트 성공 시 리디렉션 또는 처리
                     window.location.href = `/articles/${id}`; // 수정된 기사 페이지로 리디렉션
                 } else {

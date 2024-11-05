@@ -8,6 +8,9 @@ const EditArticle = () => {
     const [article, setArticle] = useState(null); // 상태 관리
     const navigate = useNavigate();
 
+    console.log(useParams());
+
+    // 화면이 렌더링 될때, id 값이 변견이 될때 실행됨
     useEffect(() => {
         // 특정 기사를 가져오기 위한 API 요청
         fetch(`/articles/${id}/edit`)

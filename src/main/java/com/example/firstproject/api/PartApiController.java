@@ -33,6 +33,8 @@ public class PartApiController {
             @RequestParam(value = "size") int size   // 페이지당 항목 수
     ) {
         log.info("searchTerm : " + searchTerm);
+        log.info("page : " + page);
+        log.info("size : " + size);
         Pageable pageable = PageRequest.of(page, size);  // Pageable 객체 생성
 
         // 검색어가 있으면 검색된 결과를, 없으면 전체 목록을 페이징 처리

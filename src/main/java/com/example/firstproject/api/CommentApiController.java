@@ -2,6 +2,7 @@ package com.example.firstproject.api;
 
 import com.example.firstproject.dto.CommentDto;
 import com.example.firstproject.service.CommentService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 public class CommentApiController {
     @Autowired
@@ -25,6 +27,9 @@ public class CommentApiController {
     @PostMapping("/api/articles/{articleId}/comments")
     public ResponseEntity<CommentDto> create(@PathVariable Long articleId,
                                              @RequestBody CommentDto dto) {
+
+        log.info(String.valueOf(articleId));
+        log.info(String.valueOf(dto));
         // 서비스에게 위임
         CommentDto createdDto = commentService.create(articleId, dto);
         // 결과 응답

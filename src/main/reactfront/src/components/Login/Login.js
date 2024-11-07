@@ -8,13 +8,15 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault(); // 기본 폼 제출 방지
         const loginData = {
-            username,
+            userid: username,
             psword: password,
         };
 
         try {
-            const response = await fetch('/login', {
+            console.log('loginData',loginData);
+            const response = await fetch('/api/login', {
                 method: 'POST',
+                credentials: 'include', // 쿠키 기반 세션 사용을 위해 필요
                 body: JSON.stringify(loginData),
                 headers: {
                     'Content-Type': 'application/json',

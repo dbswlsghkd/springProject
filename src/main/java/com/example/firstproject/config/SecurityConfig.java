@@ -46,25 +46,25 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // 프론트쪽 cors 문제 해결 (react, vue 등 프론트엔드가 같이 구현된 경우 사용
-        // http
-        //         .cors((corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
-        //
-        //             @Override
-        //             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-        //
-        //                 CorsConfiguration configuration = new CorsConfiguration();
-        //
-        //                 configuration.setAllowedOrigins(Collections.singletonList("http://localhost:8081"));
-        //                 configuration.setAllowedMethods(Collections.singletonList("*"));
-        //                 configuration.setAllowCredentials(true);
-        //                 configuration.setAllowedHeaders(Collections.singletonList("*"));
-        //                 configuration.setMaxAge(3600L);
-        //
-        //                 configuration.setExposedHeaders(Collections.singletonList("Authorization"));
-        //
-        //                 return configuration;
-        //             }
-        //         })));
+        http
+                .cors((corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
+
+                    @Override
+                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+
+                        CorsConfiguration configuration = new CorsConfiguration();
+
+                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+                        configuration.setAllowedMethods(Collections.singletonList("*"));
+                        configuration.setAllowCredentials(true);
+                        configuration.setAllowedHeaders(Collections.singletonList("*"));
+                        configuration.setMaxAge(3600L);
+
+                        configuration.setExposedHeaders(Collections.singletonList("Authorization"));
+
+                        return configuration;
+                    }
+                })));
         // csrf disable
         http
                 .csrf((auth) -> auth.disable());

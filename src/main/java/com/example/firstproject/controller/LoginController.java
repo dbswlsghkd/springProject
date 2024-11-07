@@ -40,8 +40,16 @@ public class LoginController {
 
     @GetMapping("/login")
     public String showLoginPage(Model model) {
-        return "login/login"; // login.mustache를 반환
+        // return "login/login"; // login.mustache를 반환
+        return "login/login";
     }
+
+    // @PostMapping("/login")
+    // public String Login(@ModelAttribute LoginDto loginDto, Model model) {
+    //     log.info("로그인 들어와?");
+    //     return "안녕";
+    // }
+
 
     // spring security 사용 하면 해당 부분은 필요가 없음
     // @PostMapping("/login")

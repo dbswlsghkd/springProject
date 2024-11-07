@@ -31,6 +31,9 @@ public class PartController {
             @RequestParam(value = "size", defaultValue = "5") int size,
             Model model) {
 
+        log.info(String.valueOf(page));
+        log.info(String.valueOf(size));
+
         // 페이지 번호와 크기를 설정한 Pageable 객체 생성
         Pageable pageable = PageRequest.of(page, size);  // 0번째 페이지, 한 페이지에 10개 항목
 

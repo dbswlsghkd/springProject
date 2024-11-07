@@ -1,0 +1,12 @@
+# Gradle 빌드 파일 및 캐시 제외
+.gradle/
+#build/
+
+# Git 디렉터리 제외
+.git/
+
+# OS별 숨김 파일 제외 (예: macOS의 .DS_Store)
+.DS_Store
+
+# 임시 파일 제외
+*.log

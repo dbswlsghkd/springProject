@@ -1,9 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import '../../styles/styles.css'; // 스타일 파일 추가
+
+import '../../styles/header.css'; // 스타일 파일 추가
 
 const Header = ({ children }) => {
     return (

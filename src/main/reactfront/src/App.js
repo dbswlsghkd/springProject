@@ -12,6 +12,8 @@ const App = () => {
   return (
       <BrowserRouter>
         <Routes>
+            {/* 기본 페이지를 로그인 페이지로 설정 */}
+            <Route path="/" element={<Login />} />
             <Route path="/login" exact element={<Login></Login>}></Route>
             <Route path="/articles" exact element={<Articles></Articles>}></Route>
             <Route path="/articles/:id" element={<ArticleShow></ArticleShow>}></Route>

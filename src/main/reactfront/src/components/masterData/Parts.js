@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../layouts/Header';
 import Footer from '../layouts/Footer';
-import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 const PartTable = () => {
     const [parts, setParts] = useState([]);
@@ -15,6 +15,8 @@ const PartTable = () => {
     useEffect(() => {
         fetchParts(searchTerm, currentPage);
     }, [currentPage, searchTerm]);
+
+
 
     const fetchParts = async (term, page) => {
         try {
@@ -67,60 +69,98 @@ const PartTable = () => {
         }
     };
 
+    const openUpdateModal = (part) => {
+        console.log('여기')
+        setSelectedPart(part);
+
+    };
+
+    useEffect(() => {
+        if (typeof window.bootstrap === 'undefined') {
+            console.error('Bootstrap is not loaded');
+        } else {
+            console.log('Bootstrap loaded successfully');
+        }
+    }, []);
+
+    useEffect(() => {
+        if (selectedPart) {
+            console.log(selectedPart);
+
+            const showModal = () => {
+                // Bootstrap이 로드되었는지 반복적으로 확인하고 Modal 인스턴스를 생성
+                // console.log(typeof window.bootstrap !== 'undefined')
+                const modalElement = document.getElementById('comment-update-modal');
+
+
+                if (modalElement) {
+                    const modal = new window.bootstrap.Modal(modalElement);
+                    console.log(modal)
+                    modal.show();
+                } else {
+                    console.error('Bootstrap Modal is not loaded properly');
+                }
+            };
+
+            // 200ms의 지연 후 확인하는 방식으로 showModal 호출
+            setTimeout(showModal, 200);
+        }
+    }, [selectedPart]);
+
     return (
         <>
-        <Header>
-        <div>
-            <div className="input-group ms-auto">
-                <button type="button" className="btn btn-sm btn-outline-dark" data-bs-toggle="modal" data-bs-target="#comment-create-modal">
-                    등록
-                </button>
-            </div>
+            <Header>
+                <div>
+                    <div className="input-group ms-auto">
+                        <button type="button" className="btn btn-sm btn-outline-dark" data-bs-toggle="modal" data-bs-target="#comment-create-modal">
+                            등록
+                        </button>
+                    </div>
 
-            <div className="input-group mb-3 w-25 ms-auto">
-                <input
-                    id="searchInput"
-                    type="text"
-                    className="form-control"
-                    placeholder="품번, 품명, 규격"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                <button className="btn btn-outline-secondary" type="button" onClick={handleSearch}>
-                    <i className="bi bi-search"></i>
-                </button>
-            </div>
+                    <div className="input-group mb-3 w-25 ms-auto">
+                        <input
+                            id="searchInput"
+                            type="text"
+                            className="form-control"
+                            placeholder="품번, 품명, 규격"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                        <button className="btn btn-outline-secondary" type="button" onClick={handleSearch}>
+                            <i className="bi bi-search"></i>
+                        </button>
+                    </div>
 
-            <table className="table table-striped table-sm table-hover">
-                <thead className="table-dark">
-                <tr>
-                    <th style={{ width: '150px', textAlign: 'center' }}>품번</th>
-                    <th style={{ width: '150px', textAlign: 'center' }}>품명</th>
-                    <th style={{ width: '150px', textAlign: 'center' }}>규격</th>
-                </tr>
-                </thead>
-                <tbody>
-                {parts.map((part) => (
-                    <tr
-                        key={part.part_code}
-                        data-bs-toggle="modal"
-                        data-bs-target="#comment-update-modal"
-                        onClick={() => setSelectedPart(part)}
-                    >
-                        <th>{part.part_code}</th>
-                        <td>{part.part_name}</td>
-                        <td>{part.part_std}</td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
+                    <table className="table table-striped table-sm table-hover">
+                        <thead className="table-dark">
+                        <tr>
+                            <th style={{ width: '150px', textAlign: 'center' }}>품번</th>
+                            <th style={{ width: '150px', textAlign: 'center' }}>품명</th>
+                            <th style={{ width: '150px', textAlign: 'center' }}>규격</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {parts.map((part) => (
+                            <tr
+                                key={part.part_code}
+                                onClick={() => openUpdateModal(part)} // 선택 시 selectedPart를 업데이트
+                                // data-bs-toggle="modal"
+                                // data-bs-target="#comment-update-modal"
+                            >
+                                <th>{part.part_code}</th>
+                                <td>{part.part_name}</td>
+                                <td>{part.part_std}</td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
 
-            <Pagination totalPages={totalPages} currentPage={currentPage} setCurrentPage={setCurrentPage} />
-            <PartFormModal onCreate={handleCreatePart} />
-            {selectedPart && <CommentUpdateModal part={selectedPart} onUpdate={handleUpdatePart} />}
-        </div>
-        </Header>
-        <Footer />
+                    <Pagination totalPages={totalPages} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+                    <PartFormModal onCreate={handleCreatePart} />
+                    {selectedPart && <CommentUpdateModal part={selectedPart} onUpdate={handleUpdatePart} />}
+                </div>
+            </Header>
+            <Footer />
         </>
     );
 };
@@ -160,7 +200,7 @@ const PartFormModal = ({onCreate}) => {
     };
 
     return (
-        <div className="modal fade" id="comment-create-modal" tabIndex="-1">
+        <div className="modal" id="comment-create-modal" tabIndex="-1">
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
@@ -209,6 +249,10 @@ const PartFormModal = ({onCreate}) => {
 
 const CommentUpdateModal = ({ part, onUpdate }) => {
     const [updatedPart, setUpdatedPart] = useState(part);
+
+    useEffect(() => {
+        setUpdatedPart(part); // 선택된 part가 변경될 때 updatedPart 상태를 업데이트
+    }, [part]);
 
     const handleUpdate = () => {
         onUpdate(updatedPart);

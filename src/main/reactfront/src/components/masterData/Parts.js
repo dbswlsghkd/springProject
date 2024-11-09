@@ -1,132 +1,105 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import Header from '../layouts/Header';
 import Footer from '../layouts/Footer';
 
-
-const PartTable = () => {
+function PartManagement() {
     const [parts, setParts] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
-    const [selectedPart, setSelectedPart] = useState(null);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [modalData, setModalData] = useState({ part_code: "", part_name: "", part_std: "" });
+    const [isCreateModalOpen, setCreateModalOpen] = useState(false);
+    const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
 
     const itemsPerPage = 15;
 
     useEffect(() => {
         fetchParts(searchTerm, currentPage);
-    }, [currentPage, searchTerm]);
+    }, [searchTerm, currentPage]);
 
-
-
-    const fetchParts = async (term, page) => {
+    const fetchParts = async (searchTerm, page) => {
         try {
-            const response = await fetch(`/api/parts?search=${encodeURIComponent(term)}&page=${page}&size=${itemsPerPage}`);
+            const response = await fetch(`/api/parts?search=${encodeURIComponent(searchTerm)}&page=${page}&size=${itemsPerPage}`);
             const data = await response.json();
             setParts(data.content);
             setTotalPages(data.totalPages);
         } catch (error) {
-            console.error('Error fetching parts:', error);
+            console.error("Error fetching parts:", error);
         }
     };
 
     const handleSearch = () => {
-        setCurrentPage(0); // 검색 시 첫 페이지로 이동
+        setCurrentPage(0); // 검색 시 첫 페이지로 초기화
         fetchParts(searchTerm, 0);
     };
 
-    const handleCreatePart = async (part) => {
+    const handleCreatePart = async () => {
+        const url = "/api/part/create";
         try {
-            const response = await fetch('/api/part/create', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(part),
+            const response = await fetch(url, {
+                method: "POST",
+                body: JSON.stringify(modalData),
+                headers: { "Content-Type": "application/json" },
             });
             if (response.ok) {
-                fetchParts(searchTerm, currentPage);
+                setCreateModalOpen(false);
+                fetchParts(searchTerm, currentPage); // 페이지 새로고침
             } else {
-                alert('품번 등록 실패하였습니다.');
+                alert("품번 등록 실패하였습니다.!");
             }
         } catch (error) {
-            console.error('Error creating part:', error);
+            console.error("Error creating part:", error);
         }
     };
 
-    const handleUpdatePart = async (part) => {
+    const handleUpdatePart = async () => {
+        const url = `/api/part/update/${encodeURIComponent(modalData.part_code)}`;
         try {
-            const response = await fetch(`/api/part/update/${encodeURIComponent(part.part_code)}`, {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(part),
+            const response = await fetch(url, {
+                method: "PATCH",
+                body: JSON.stringify(modalData),
+                headers: { "Content-Type": "application/json" },
             });
             if (response.ok) {
-                alert('품번이 수정 되었습니다.');
+                alert("품번이 수정되었습니다.");
+                setUpdateModalOpen(false);
                 fetchParts(searchTerm, currentPage);
             } else {
-                alert('품번 수정 실패..!');
+                alert("품번 수정 실패..!");
             }
         } catch (error) {
-            console.error('Error updating part:', error);
+            console.error("Error updating part:", error);
         }
+    };
+
+    const openCreateModal = () => {
+        setModalData({ part_code: "", part_name: "", part_std: "" });
+        setCreateModalOpen(true);
     };
 
     const openUpdateModal = (part) => {
-        console.log('여기')
-        setSelectedPart(part);
-
+        setModalData(part);
+        setUpdateModalOpen(true);
     };
-
-    useEffect(() => {
-        if (typeof window.bootstrap === 'undefined') {
-            console.error('Bootstrap is not loaded');
-        } else {
-            console.log('Bootstrap loaded successfully');
-        }
-    }, []);
-
-    useEffect(() => {
-        if (selectedPart) {
-            console.log(selectedPart);
-
-            const showModal = () => {
-                // Bootstrap이 로드되었는지 반복적으로 확인하고 Modal 인스턴스를 생성
-                // console.log(typeof window.bootstrap !== 'undefined')
-                const modalElement = document.getElementById('comment-update-modal');
-
-
-                if (modalElement) {
-                    const modal = new window.bootstrap.Modal(modalElement);
-                    console.log(modal)
-                    modal.show();
-                } else {
-                    console.error('Bootstrap Modal is not loaded properly');
-                }
-            };
-
-            // 200ms의 지연 후 확인하는 방식으로 showModal 호출
-            setTimeout(showModal, 200);
-        }
-    }, [selectedPart]);
 
     return (
         <>
             <Header>
                 <div>
                     <div className="input-group ms-auto">
-                        <button type="button" className="btn btn-sm btn-outline-dark" data-bs-toggle="modal" data-bs-target="#comment-create-modal">
+                        <button type="button" className="btn btn-sm btn-outline-dark" onClick={openCreateModal}>
                             등록
                         </button>
                     </div>
-
                     <div className="input-group mb-3 w-25 ms-auto">
                         <input
-                            id="searchInput"
                             type="text"
                             className="form-control"
                             placeholder="품번, 품명, 규격"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
-                        <button className="btn btn-outline-secondary" type="button" onClick={handleSearch}>
+                        <button className="btn btn-outline-secondary" onClick={handleSearch}>
                             <i className="bi bi-search"></i>
                         </button>
                     </div>
@@ -134,19 +107,14 @@ const PartTable = () => {
                     <table className="table table-striped table-sm table-hover">
                         <thead className="table-dark">
                         <tr>
-                            <th style={{ width: '150px', textAlign: 'center' }}>품번</th>
-                            <th style={{ width: '150px', textAlign: 'center' }}>품명</th>
-                            <th style={{ width: '150px', textAlign: 'center' }}>규격</th>
+                            <th style={{width: "150px", textAlign: "center"}}>품번</th>
+                            <th style={{width: "150px", textAlign: "center"}}>품명</th>
+                            <th style={{width: "150px", textAlign: "center"}}>규격</th>
                         </tr>
                         </thead>
                         <tbody>
                         {parts.map((part) => (
-                            <tr
-                                key={part.part_code}
-                                onClick={() => openUpdateModal(part)} // 선택 시 selectedPart를 업데이트
-                                // data-bs-toggle="modal"
-                                // data-bs-target="#comment-update-modal"
-                            >
+                            <tr key={part.part_code} onClick={() => openUpdateModal(part)}>
                                 <th>{part.part_code}</th>
                                 <td>{part.part_name}</td>
                                 <td>{part.part_std}</td>
@@ -156,14 +124,24 @@ const PartTable = () => {
                     </table>
 
                     <Pagination totalPages={totalPages} currentPage={currentPage} setCurrentPage={setCurrentPage} />
-                    <PartFormModal onCreate={handleCreatePart} />
-                    {selectedPart && <CommentUpdateModal part={selectedPart} onUpdate={handleUpdatePart} />}
+
+                    {/* Create Modal */}
+                    {isCreateModalOpen && (
+                        <Modal title="품번 등록" modalData={modalData} setModalData={setModalData}
+                               onSubmit={handleCreatePart} onClose={() => setCreateModalOpen(false)}/>
+                    )}
+
+                    {/* Update Modal */}
+                    {isUpdateModalOpen && (
+                        <Modal title="품번 수정" modalData={modalData} setModalData={setModalData}
+                               onSubmit={handleUpdatePart} onClose={() => setUpdateModalOpen(false)}/>
+                    )}
                 </div>
             </Header>
-            <Footer />
+            <Footer/>
         </>
     );
-};
+}
 
 const Pagination = ({ totalPages, currentPage, setCurrentPage }) => {
     const maxPagesToShow = 10; // 최대 표시할 페이지 수
@@ -191,21 +169,14 @@ const Pagination = ({ totalPages, currentPage, setCurrentPage }) => {
     );
 };
 
-const PartFormModal = ({onCreate}) => {
-    const [part, setPart] = useState({ part_code: '', part_name: '', part_std: '' });
-
-    const handleSubmit = () => {
-        onCreate(part);
-        setPart({ part_code: '', part_name: '', part_std: '' });
-    };
-
+function Modal({ title, modalData, setModalData, onSubmit, onClose }) {
     return (
-        <div className="modal" id="comment-create-modal" tabIndex="-1">
+        <div className="modal show d-block" tabIndex="-1">
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h5 className="modal-title">품번 등록</h5>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
+                        <h5 className="modal-title">{title}</h5>
+                        <button type="button" className="btn-close" onClick={onClose}></button>
                     </div>
                     <div className="modal-body">
                         <form>
@@ -214,8 +185,8 @@ const PartFormModal = ({onCreate}) => {
                                 <input
                                     type="text"
                                     className="form-control form-control-sm"
-                                    value={part.part_code}
-                                    onChange={(e) => setPart({ ...part, part_code: e.target.value })}
+                                    value={modalData.part_code}
+                                    onChange={(e) => setModalData({ ...modalData, part_code: e.target.value })}
                                 />
                             </div>
                             <div className="mb-3">
@@ -223,8 +194,8 @@ const PartFormModal = ({onCreate}) => {
                                 <input
                                     type="text"
                                     className="form-control form-control-sm"
-                                    value={part.part_name}
-                                    onChange={(e) => setPart({ ...part, part_name: e.target.value })}
+                                    value={modalData.part_name}
+                                    onChange={(e) => setModalData({ ...modalData, part_name: e.target.value })}
                                 />
                             </div>
                             <div className="mb-3">
@@ -232,78 +203,17 @@ const PartFormModal = ({onCreate}) => {
                                 <input
                                     type="text"
                                     className="form-control form-control-sm"
-                                    value={part.part_std}
-                                    onChange={(e) => setPart({ ...part, part_std: e.target.value })}
+                                    value={modalData.part_std}
+                                    onChange={(e) => setModalData({ ...modalData, part_std: e.target.value })}
                                 />
                             </div>
-                            <button type="button" className="btn btn-outline-dark btn-sm" onClick={handleSubmit}>
-                                등록 완료
-                            </button>
+                            <button type="button" className="btn btn-outline-dark btn-sm" onClick={onSubmit}>등록 완료</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     );
-};
+}
 
-const CommentUpdateModal = ({ part, onUpdate }) => {
-    const [updatedPart, setUpdatedPart] = useState(part);
-
-    useEffect(() => {
-        setUpdatedPart(part); // 선택된 part가 변경될 때 updatedPart 상태를 업데이트
-    }, [part]);
-
-    const handleUpdate = () => {
-        onUpdate(updatedPart);
-    };
-
-    return (
-        <div className="modal fade" id="comment-update-modal" tabIndex="-1">
-            <div className="modal-dialog">
-                <div className="modal-content">
-                    <div className="modal-header">
-                        <h5 className="modal-title">품번 수정</h5>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div className="modal-body">
-                        <form>
-                            <div className="mb-3">
-                                <label className="form-label">품번</label>
-                                <input
-                                    type="text"
-                                    className="form-control form-control-sm"
-                                    value={updatedPart.part_code}
-                                    onChange={(e) => setUpdatedPart({ ...updatedPart, part_code: e.target.value })}
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <label className="form-label">품명</label>
-                                <input
-                                    type="text"
-                                    className="form-control form-control-sm"
-                                    value={updatedPart.part_name}
-                                    onChange={(e) => setUpdatedPart({ ...updatedPart, part_name: e.target.value })}
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <label className="form-label">규격</label>
-                                <input
-                                    type="text"
-                                    className="form-control form-control-sm"
-                                    value={updatedPart.part_std}
-                                    onChange={(e) => setUpdatedPart({ ...updatedPart, part_std: e.target.value })}
-                                />
-                            </div>
-                            <button type="button" className="btn btn-outline-dark btn-sm" onClick={handleUpdate}>
-                                수정 완료
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-};
-
-export default PartTable;
+export default PartManagement;

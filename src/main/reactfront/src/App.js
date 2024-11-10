@@ -6,6 +6,7 @@ import IndexArticles from "./components/articles/new"
 import ArticleShow from "./components/articles/show"
 import ArticleEdit from "./components/articles/edit"
 import PartTable from "./components/masterData/Parts";
+import PartnersManagement from "./components/masterData/Partner";
 
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
             <Route path="/articles/:id/edit" element={<ArticleEdit></ArticleEdit>}></Route>
             <Route path="/articles/new" exact element={<IndexArticles></IndexArticles>}></Route>
             <Route path="/parts" exact element={<PartTable></PartTable>}></Route>
+            <Route path="/partners" exact element={<PartnersManagement></PartnersManagement>}></Route>
         </Routes>
       </BrowserRouter>
   );

@@ -7,6 +7,7 @@ import ArticleShow from "./components/articles/show"
 import ArticleEdit from "./components/articles/edit"
 import PartTable from "./components/masterData/Parts";
 import PartnersManagement from "./components/masterData/Partner";
+import UserManagement from "./components/masterData/Users";
 
 
 const App = () => {
@@ -22,6 +23,7 @@ const App = () => {
             <Route path="/articles/new" exact element={<IndexArticles></IndexArticles>}></Route>
             <Route path="/parts" exact element={<PartTable></PartTable>}></Route>
             <Route path="/partners" exact element={<PartnersManagement></PartnersManagement>}></Route>
+            <Route path="/users" exact element={<UserManagement></UserManagement>}></Route>
         </Routes>
       </BrowserRouter>
   );

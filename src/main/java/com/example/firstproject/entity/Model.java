@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 public class Model {
 
     @Id
+    @Column(name = "model_code", length = 5, columnDefinition = "CHAR(5)") // 길이를 50으로 지정
     private String model_code;
     private String model_name;
     private LocalDateTime regdt;

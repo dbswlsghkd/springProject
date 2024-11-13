@@ -61,13 +61,20 @@ const Header = ({ children }) => {
                                     <div className="accordion-body">
                                         <ul className="nav flex-column">
                                             <li className="nav-item">
-                                                <Link className="nav-link" to="/parts"><i className="bi bi-arrow-right-short"></i>품번관리</Link>
+                                                <Link className="nav-link" to="/parts"><i
+                                                    className="bi bi-arrow-right-short"></i>품번관리</Link>
                                             </li>
                                             <li className="nav-item">
-                                                <Link className="nav-link" to="/partners"><i className="bi bi-arrow-right-short"></i>거래업체 관리</Link>
+                                                <Link className="nav-link" to="/partners"><i
+                                                    className="bi bi-arrow-right-short"></i>거래업체 관리</Link>
                                             </li>
                                             <li className="nav-item">
-                                                <Link className="nav-link" to="/users"><i className="bi bi-arrow-right-short"></i>사용자 관리</Link>
+                                                <Link className="nav-link" to="/users"><i
+                                                    className="bi bi-arrow-right-short"></i>사용자 관리</Link>
+                                            </li>
+                                            <li className="nav-item">
+                                                <Link className="nav-link" to="/models"><i
+                                                    className="bi bi-arrow-right-short"></i>모델 관리</Link>
                                             </li>
                                         </ul>
                                     </div>

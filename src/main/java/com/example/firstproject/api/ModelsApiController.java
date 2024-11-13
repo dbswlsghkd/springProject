@@ -30,7 +30,7 @@ public class ModelsApiController {
 
         // 검색어가 있으면 검색된 결과를, 없으면 전체 목록을 페이징 처리
         if (searchTerm != null && !searchTerm.isEmpty()) {
-            return modelService.searchParts(searchTerm, pageable); // 검색어에 맞는 model을 페이징 처리
+            return modelService.searchModel(searchTerm, pageable); // 검색어에 맞는 model을 페이징 처리
         }
         return modelService.index(pageable); // 전체 model를 페이징 처리
     }

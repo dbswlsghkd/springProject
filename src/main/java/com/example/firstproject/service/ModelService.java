@@ -21,7 +21,7 @@ public class ModelService {
         return modelRepository.findModelBy(pageable);
     }
 
-    public Page<Model> searchParts(String searchTerm, Pageable pageable) {
+    public Page<Model> searchModel(String searchTerm, Pageable pageable) {
         String searchPattern = "%" + searchTerm + "%";
         return modelRepository.findBySearch(searchPattern, pageable);
     }

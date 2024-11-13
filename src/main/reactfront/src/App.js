@@ -9,6 +9,7 @@ import PartTable from "./components/masterData/Parts";
 import PartnersManagement from "./components/masterData/Partner";
 import UserManagement from "./components/masterData/Users";
 import RegisterForm from "./components/Login/Register";
+import ModelManagement from "./components/masterData/Models";
 
 
 const App = () => {
@@ -26,6 +27,7 @@ const App = () => {
             <Route path="/partners" exact element={<PartnersManagement></PartnersManagement>}></Route>
             <Route path="/users" exact element={<UserManagement></UserManagement>}></Route>
             <Route path="/register" exact element={<RegisterForm></RegisterForm>}></Route>
+            <Route path="/model" exact element={<ModelManagement></ModelManagement>}></Route>
         </Routes>
       </BrowserRouter>
   );

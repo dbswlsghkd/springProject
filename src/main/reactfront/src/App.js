@@ -27,7 +27,7 @@ const App = () => {
             <Route path="/partners" exact element={<PartnersManagement></PartnersManagement>}></Route>
             <Route path="/users" exact element={<UserManagement></UserManagement>}></Route>
             <Route path="/register" exact element={<RegisterForm></RegisterForm>}></Route>
-            <Route path="/model" exact element={<ModelManagement></ModelManagement>}></Route>
+            <Route path="/models" exact element={<ModelManagement></ModelManagement>}></Route>
         </Routes>
       </BrowserRouter>
   );

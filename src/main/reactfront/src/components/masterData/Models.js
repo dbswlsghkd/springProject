@@ -7,7 +7,7 @@ function ModelManagement() {
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
-    const [modalData, setModalData] = useState({ model_code: "", model_name: "", regdt: "" });
+    const [modalData, setModalData] = useState({ model_code: "", model_name: ""});
     const [isCreateModalOpen, setCreateModalOpen] = useState(false);
     const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
 
@@ -73,7 +73,7 @@ function ModelManagement() {
     };
 
     const openCreateModal = () => {
-        setModalData({ model_code: "", model_name: "", regdt: "" });
+        setModalData({ model_code: "", model_name: ""});
         setCreateModalOpen(true);
     };
 

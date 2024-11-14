@@ -1,8 +1,11 @@
 package com.example.firstproject.entity;
 
+import com.example.firstproject.dto.ModelDto;
+import com.example.firstproject.dto.PartDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,5 +25,23 @@ public class Model {
     private String model_code;
     private String model_name;
     private LocalDateTime regdt;
+
+
+    // 엔티티가 처음 저장되기 전에 regdt에 현재 시각을 자동으로 설정
+    @PrePersist
+    public void prePersist() {
+        this.regdt = this.regdt == null ? LocalDateTime.now() : this.regdt;
+    }
+
+    // 모델 등록
+    public static Model createModel(ModelDto dto) {
+        // 예외 발생
+        // 엔티티 생성 및 반환
+        return new Model(
+                dto.getModel_code(),
+                dto.getModel_name(),
+                dto.getRegdt()
+        );
+    }
 
 }

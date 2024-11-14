@@ -1,5 +1,6 @@
 package com.example.firstproject.api;
 
+import com.example.firstproject.dto.ModelDto;
 import com.example.firstproject.entity.Model;
 import com.example.firstproject.service.ModelService;
 import lombok.extern.slf4j.Slf4j;
@@ -7,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
@@ -33,5 +34,17 @@ public class ModelsApiController {
             return modelService.searchModel(searchTerm, pageable); // 검색어에 맞는 model을 페이징 처리
         }
         return modelService.index(pageable); // 전체 model를 페이징 처리
+    }
+
+    @PostMapping("/api/model/create")
+    public ResponseEntity<ModelDto> create(@RequestBody ModelDto modelDto) {
+
+        log.info(modelDto.toString());
+
+        ModelDto createDto = modelService.create(modelDto);
+        // 결과 응답
+        return (createDto != null) ?
+                ResponseEntity.status(HttpStatus.OK).body(createDto) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 }

@@ -2,11 +2,13 @@ package com.example.firstproject.repository;
 
 
 import com.example.firstproject.entity.Model;
+import com.example.firstproject.entity.Part;
 import com.example.firstproject.entity.Partners;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface ModelRepository extends JpaRepository<Model, String> {
 
@@ -20,5 +22,9 @@ public interface ModelRepository extends JpaRepository<Model, String> {
                     "OR model_name like ?1 ",
             nativeQuery = true)
     Page<Model> findBySearch(String searchTerm, Pageable pageable);
+
+    @Query(value = "SELECT * FROM model WHERE model_code = :modelcode", nativeQuery = true
+    )
+    Model findByModelCode(@Param("modelcode") String modelcode);
 
 }

@@ -53,5 +53,17 @@ public class ModelService {
 
     // 수정
     @Transactional
-    public void update(ModelDto dto) {}
+    public ModelDto update(String modelcode, ModelDto dto) {
+        Model target = modelRepository.findByModelCode(modelcode);
+
+        if(target == null) {
+            return null;
+        }else {
+            // 댓글 수정
+            target.patch(dto);
+            Model updatedModel = modelRepository.save(target);
+            return ModelDto.createModelDto(updatedModel);
+        }
+
+    }
 }

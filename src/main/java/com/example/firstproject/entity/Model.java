@@ -44,4 +44,12 @@ public class Model {
         );
     }
 
+    public void patch(ModelDto dto) {
+        if (!this.model_code.equals(dto.getModel_code()))
+            throw new IllegalArgumentException("모델 수정 실패! 잘못된 모델이 입력되었습니다.");
+        // 객체를 갱신
+        if (dto.getModel_name() != null)
+            this.model_name = dto.getModel_name();
+    }
+
 }

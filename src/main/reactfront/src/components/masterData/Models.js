@@ -53,7 +53,7 @@ function ModelManagement() {
     };
 
     const handleUpdateModel = async () => {
-        const url = `/api/model/update/${encodeURIComponent(modalData.part_code)}`;
+        const url = `/api/model/update/${encodeURIComponent(modalData.model_code)}`;
         try {
             const response = await fetch(url, {
                 method: "PATCH",

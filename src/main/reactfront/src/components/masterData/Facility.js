@@ -21,6 +21,7 @@ function FacilityManagement() {
         try {
             const response = await fetch(`/api/facility?search=${encodeURIComponent(searchTerm)}&page=${page}&size=${itemsPerPage}`);
             const data = await response.json();
+            console.log(data);
             setFacility(data.content);
             setTotalPages(data.totalPages);
         } catch (error) {
@@ -61,11 +62,11 @@ function FacilityManagement() {
                 headers: { "Content-Type": "application/json" },
             });
             if (response.ok) {
-                alert("모델 수정되었습니다.");
+                alert("설비 수정되었습니다.");
                 setUpdateModalOpen(false);
                 fetchFacility(searchTerm, currentPage);
             } else {
-                alert("모델 수정 실패..!");
+                alert("설비 수정 실패..!");
             }
         } catch (error) {
             console.error("Error updating part:", error);

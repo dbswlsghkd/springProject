@@ -10,6 +10,7 @@ import PartnersManagement from "./components/masterData/Partner";
 import UserManagement from "./components/masterData/Users";
 import RegisterForm from "./components/Login/Register";
 import ModelManagement from "./components/masterData/Models";
+import FacilityManagement from "./components/masterData/Facility";
 
 
 const App = () => {
@@ -28,6 +29,7 @@ const App = () => {
             <Route path="/users" exact element={<UserManagement></UserManagement>}></Route>
             <Route path="/register" exact element={<RegisterForm></RegisterForm>}></Route>
             <Route path="/models" exact element={<ModelManagement></ModelManagement>}></Route>
+            <Route path="/facility" exact element={<FacilityManagement></FacilityManagement>}></Route>
         </Routes>
       </BrowserRouter>
   );

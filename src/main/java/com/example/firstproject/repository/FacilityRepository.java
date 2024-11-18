@@ -20,4 +20,7 @@ public interface FacilityRepository extends JpaRepository<Facility, String> {
             nativeQuery = true)
     Page<Facility> findBySearch(String searchTerm, Pageable pageable);
 
+    @Query(value = "SELECT * FROM facility WHERE facility_code = ?1", nativeQuery = true)
+    Facility findByFacilityCode(String facilityCode);
+
 }

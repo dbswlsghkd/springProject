@@ -1,5 +1,6 @@
 package com.example.firstproject.api;
 
+import com.example.firstproject.dto.FacilityDto;
 import com.example.firstproject.entity.Facility;
 import com.example.firstproject.service.FacilityService;
 import jakarta.persistence.EntityNotFoundException;
@@ -10,10 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
@@ -33,6 +31,18 @@ public class FacilityApiController {
             return facilityService.searchFacility(searchTerm, pageable);
         }
         return facilityService.index(pageable);
+    }
+
+    @PostMapping("/api/facility/create")
+    public ResponseEntity<FacilityDto> create(@RequestBody FacilityDto dto){
+
+        log.info(dto.toString());
+
+        FacilityDto createDto = facilityService.create(dto);
+
+        return (createDto != null) ?
+                ResponseEntity.status(HttpStatus.OK).body(createDto) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
     @ExceptionHandler(EntityNotFoundException.class)

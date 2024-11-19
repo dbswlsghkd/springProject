@@ -38,4 +38,12 @@ public class Facility {
                 dto.getSkey()
         );
     }
+
+    public void patch(FacilityDto dto){
+        if(!this.facility_code.equals(dto.getFacility_code()))
+            throw new IllegalArgumentException("설비 수정 실패! 잘못된 설비가 입력되었습니다.");
+
+        if (dto.getFacility_name() != null)
+            this.facility_name = dto.getFacility_name();
+    }
 }

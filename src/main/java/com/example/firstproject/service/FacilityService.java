@@ -44,4 +44,19 @@ public class FacilityService {
         }
     }
 
+    @Transactional
+    public FacilityDto update(String facility_code, FacilityDto facilityDto) {
+
+        Facility facility = facilityRepository.findByFacilityCode(facility_code);
+
+        if(facility != null) {
+            facility.patch(facilityDto);
+            Facility updateFacility = facilityRepository.save(facility);
+            return FacilityDto.createFacility(updateFacility);
+        }else{
+            return null;
+        }
+
+    }
+
 }

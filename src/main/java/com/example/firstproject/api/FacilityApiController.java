@@ -45,6 +45,14 @@ public class FacilityApiController {
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    @PatchMapping("/api/facility/update/{facility_code}")
+    public ResponseEntity<FacilityDto> update(@PathVariable String facility_code,@RequestBody FacilityDto Dto){
+
+        FacilityDto updateDto = facilityService.update(facility_code, Dto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(updateDto);
+    }
+
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<String> handleEntityNotFoundException(EntityNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());

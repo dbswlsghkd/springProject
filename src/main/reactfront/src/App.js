@@ -11,6 +11,7 @@ import UserManagement from "./components/masterData/Users";
 import RegisterForm from "./components/Login/Register";
 import ModelManagement from "./components/masterData/Models";
 import FacilityManagement from "./components/masterData/Facility";
+import MoldManagement from "./components/masterData/Mold";
 
 
 const App = () => {
@@ -30,6 +31,7 @@ const App = () => {
             <Route path="/register" exact element={<RegisterForm></RegisterForm>}></Route>
             <Route path="/models" exact element={<ModelManagement></ModelManagement>}></Route>
             <Route path="/facility" exact element={<FacilityManagement></FacilityManagement>}></Route>
+            <Route path="/mold" exact element={<MoldManagement></MoldManagement>}></Route>
         </Routes>
       </BrowserRouter>
   );

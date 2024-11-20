@@ -80,6 +80,10 @@ const Header = ({ children }) => {
                                                 <Link className="nav-link" to="/facility"><i
                                                     className="bi bi-arrow-right-short"></i>설비 관리</Link>
                                             </li>
+                                            <li className="nav-item">
+                                                <Link className="nav-link" to="/mold"><i
+                                                    className="bi bi-arrow-right-short"></i>금형 관리</Link>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>

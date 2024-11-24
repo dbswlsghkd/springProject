@@ -6,7 +6,9 @@ import com.example.firstproject.dto.RegisterDto;
 import com.example.firstproject.entity.Comment;
 import com.example.firstproject.entity.Part;
 import com.example.firstproject.entity.Users;
+import com.example.firstproject.repository.PartMapper;
 import com.example.firstproject.repository.PartRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,24 +21,34 @@ import java.util.List;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class PartService {
+    private final PartMapper partMapper;
 
     @Autowired
     private PartRepository partRepository;
 
+
+
     public Page<Part> index(Pageable pageable) {
-        return partRepository.findPartBy(pageable);
+        // return partRepository.findPartBy(pageable);
+        log.info("index==========> 여기 들어와" );
+        return partMapper.findPartBy(pageable);
     }
+
 
     public Page<Part> searchParts(String searchTerm, Pageable pageable) {
         String searchPattern = "%" + searchTerm + "%";
-        return partRepository.findBySearch(searchPattern, pageable);
+        // return partRepository.findBySearch(searchPattern, pageable);
+        log.info("searchParts ==========> 여기 들어와" );
+        return partMapper.findBySearch(searchPattern, pageable);
     }
 
     @Transactional
     public PartDto create(PartDto dto) {
         // 품번 조회 및 예외 발생
-        Part parts = partRepository.findByPartCode(dto.getPart_code());
+        // Part parts = partRepository.findByPartCode(dto.getPart_code());
+        Part parts = partMapper.findByPartCode(dto.getPart_code());
         // 로그인 실패 시
         if (parts == null) {
             // 회원가입 엔티티 생성
@@ -56,7 +68,8 @@ public class PartService {
     @Transactional
     public PartDto update(String partcode, PartDto dto) {
         // 댓글 조회 및 예외 발생
-        Part target = partRepository.findPartCode(partcode)
+        // Part target = partRepository.findPartCode(partcode)
+        Part target = partMapper.findPartCode(partcode)
                 .orElseThrow(() -> new IllegalArgumentException("품번 수정 실패! 대상 품번이 없습니다."));
         // 댓글 수정
         target.patch(dto);

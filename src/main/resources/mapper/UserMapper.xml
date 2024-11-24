@@ -2,7 +2,44 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.firstproject.mapper.UserMapper">
-    <select id="findUserById" resultType="entity.Part">
-        SELECT * FROM part WHERE part_code = #{part_code}
+    <!-- 검색어 기반 Part 조회 -->
+
+    <select id="findPartBy" resultType="com.example.firstproject.entity.Part">
+        SELECT part_code, part_name, part_std, skey
+        FROM part
+        ORDER BY part_code
+        OFFSET #{offset} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+    </select>
+
+
+    <select id="findBySearch" resultType="com.example.firstproject.entity.Part">
+        SELECT part_code, part_name, part_std, skey
+        FROM part
+        WHERE part_code LIKE '%' + #{searchTerm} + '%'
+           OR part_name LIKE '%' + #{searchTerm} + '%'
+           OR part_std LIKE '%' + #{searchTerm} + '%'
+        ORDER BY part_code
+        OFFSET #{offset} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+    </select>
+
+    <!-- 전체 데이터 개수 조회 -->
+    <select id="countParts" resultType="int">
+        SELECT COUNT(*)
+        FROM part
+        WHERE part_code LIKE '%' + #{searchTerm} + '%'
+           OR part_name LIKE '%' + #{searchTerm} + '%'
+           OR part_std LIKE '%' + #{searchTerm} + '%'
+    </select>
+
+    <select id="findByPartCode" resultType="com.example.firstproject.entity.Part">
+        SELECT *
+        FROM part
+        WHERE part_code = #{partCode}
+    </select>
+
+    <select id="findPartCode" resultType="com.example.firstproject.entity.Part">
+        SELECT *
+        FROM part
+        WHERE part_code = #{partCode}
     </select>
 </mapper>

@@ -2,8 +2,10 @@ package com.example.firstproject.repository;
 
 import com.example.firstproject.entity.Part;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,39 +17,71 @@ import java.util.Map;
 import java.util.Optional;
 
 @Repository
+@Slf4j
 @RequiredArgsConstructor
 public class PartMapper {
 
     private final SqlSessionTemplate sql;
 
-    // 검색어로 Part 조회
-    public List<Part> findBySearch(String searchTerm, Pageable pageable) {
+    public Page<Part> findBySearch(String searchTerm, Pageable pageable) {
+        // log.info("안에 들어와요?");
+        // 페이징 파라미터 생성
         Map<String, Object> params = new HashMap<>();
         params.put("searchTerm", "%" + searchTerm + "%");
         params.put("offset", pageable.getPageNumber() * pageable.getPageSize());
         params.put("pageSize", pageable.getPageSize());
 
-        return sql.selectList("com.example.firstproject.repository.PartMapper.findBySearch", params);
+        // 데이터 조회
+        List<Part> parts = sql.selectList("com.example.firstproject.mapper.UserMapper.findBySearch", params);
+
+        // 전체 개수 조회
+        int total = sql.selectOne("com.example.firstproject.mapper.UserMapper.countParts", params);
+
+        // Page 객체로 변환
+        return new PageImpl<>(parts, pageable, total);
     }
 
+    // 검색어로 Part 조회
+    // public List<Part> findBySearch(String searchTerm, Pageable pageable) {
+    //     Map<String, Object> params = new HashMap<>();
+    //     params.put("searchTerm", "%" + searchTerm + "%");
+    //     params.put("offset", pageable.getPageNumber() * pageable.getPageSize());
+    //     params.put("pageSize", pageable.getPageSize());
+    //
+    //     return sql.selectList("com.example.firstproject.repository.PartMapper.findBySearch", params);
+    // }
+
     // 전체 Part 조회
-    public List<Part> findPartBy(Pageable pageable) {
+    public Page<Part> findPartBy(Pageable pageable) {
+        log.info("안에 들어와요?");
         Map<String, Object> params = new HashMap<>();
         params.put("offset", pageable.getPageNumber() * pageable.getPageSize());
         params.put("pageSize", pageable.getPageSize());
 
-        return sql.selectList("com.example.firstproject.repository.PartMapper.findPartBy", params);
+        log.info("sql ==========> " + sql.selectList("com.example.firstproject.mapper.UserMapper.findPartBy", params));
+
+        // return sql.selectList("com.example.firstproject.repository.PartMapper.findPartBy", params);
+
+        // 데이터 조회
+        List<Part> parts = sql.selectList("com.example.firstproject.mapper.UserMapper.findPartBy", params);
+        log.info("parts ===============> " + parts);
+        // 전체 개수 조회
+        int total = sql.selectOne("com.example.firstproject.mapper.UserMapper.countParts", params);
+
+        // Page 객체로 변환
+        return new PageImpl<>(parts, pageable, total);
     }
+
 
     // partCode로 Part 조회
     public Part findByPartCode(String partCode) {
         // partCode로 조회하는 쿼리 실행
-        return sql.selectOne("com.example.firstproject.repository.PartMapper.findByPartCode", partCode);
+        return sql.selectOne("com.example.firstproject.mapper.UserMapper.findByPartCode", partCode);
     }
 
     // Optional로 partCode 조회
     public Optional<Part> findPartCode(String partCode) {
         // Optional로 조회하는 쿼리 실행
-        return Optional.ofNullable(sql.selectOne("com.example.firstproject.repository.PartMapper.findPartCode", partCode));
+        return Optional.ofNullable(sql.selectOne("com.example.firstproject.mapper.UserMapper.findPartCode", partCode));
     }
 }

@@ -28,8 +28,6 @@ public class PartService {
     @Autowired
     private PartRepository partRepository;
 
-
-
     public Page<Part> index(Pageable pageable) {
         // return partRepository.findPartBy(pageable);
         log.info("index==========> 여기 들어와" );

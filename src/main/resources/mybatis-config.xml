@@ -6,12 +6,13 @@
     <!-- 로깅 구현체 설정 (예: SLF4J) -->
     <settings>
         <setting name="logImpl" value="SLF4J" />
-        <setting name="mapUnderscoreToCamelCase" value="true" /> <!-- 스네이크 케이스 -> 카멜 케이스 변환 -->
+        <setting name="mapUnderscoreToCamelCase" value="false" /> <!-- 스네이크 케이스 -> 카멜 케이스 변환 -->
     </settings>
 
     <!-- TypeAliases 설정 -->
     <typeAliases>
         <package name="com.example.firstproject.entity" />
+<!--        <typeAlias type="com.example.firstproject.entity" alias="entity"></typeAlias>-->
     </typeAliases>
 
 </configuration>

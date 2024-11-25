@@ -6,6 +6,7 @@ import com.example.firstproject.dto.RegisterDto;
 import com.example.firstproject.entity.Part;
 import com.example.firstproject.service.PartService;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,10 +21,13 @@ import java.util.List;
 
 @RestController
 @Slf4j
+// @RequiredArgsConstructor
 public class PartApiController {
 
     @Autowired
     private PartService partService;
+
+    // private final PartService partService;
 
     // GET API with pagination
     @GetMapping("/api/parts")

@@ -21,7 +21,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PartMapper {
 
-    private final SqlSessionTemplate sql;
+    private final SqlSessionTemplate sqlsessionTemplate;
 
     public Page<Part> findBySearch(String searchTerm, Pageable pageable) {
         // log.info("안에 들어와요?");
@@ -31,11 +31,12 @@ public class PartMapper {
         params.put("offset", pageable.getPageNumber() * pageable.getPageSize());
         params.put("pageSize", pageable.getPageSize());
 
+        log.info("findBySearch 쿼리 실행 전에 도달했습니다");
         // 데이터 조회
-        List<Part> parts = sql.selectList("com.example.firstproject.mapper.UserMapper.findBySearch", params);
-
+        List<Part> parts = sqlsessionTemplate.selectList("com.example.firstproject.mapper.UserMapper.findBySearch", params);
+        log.info("findBySearch 쿼리 실행 후 결과: {}", parts);;
         // 전체 개수 조회
-        int total = sql.selectOne("com.example.firstproject.mapper.UserMapper.countParts", params);
+        int total = sqlsessionTemplate.selectOne("com.example.firstproject.mapper.UserMapper.countPartsSearch", params);
 
         // Page 객체로 변환
         return new PageImpl<>(parts, pageable, total);
@@ -53,20 +54,20 @@ public class PartMapper {
 
     // 전체 Part 조회
     public Page<Part> findPartBy(Pageable pageable) {
-        log.info("안에 들어와요?");
         Map<String, Object> params = new HashMap<>();
         params.put("offset", pageable.getPageNumber() * pageable.getPageSize());
         params.put("pageSize", pageable.getPageSize());
 
-        log.info("sql ==========> " + sql.selectList("com.example.firstproject.mapper.UserMapper.findPartBy", params));
 
         // return sql.selectList("com.example.firstproject.repository.PartMapper.findPartBy", params);
-
+        log.info("findPartBy 쿼리 실행 전에 도달했습니다");
+        // log.info("sql ==========> " + sqlsessionTemplate.selectList("com.example.firstproject.mapper.UserMapper.nana", params));
+        // log.info("sql ==========> " + sqlsessionTemplate.selectList("com.example.firstproject.mapper.UserMapper.nana", params));
         // 데이터 조회
-        List<Part> parts = sql.selectList("com.example.firstproject.mapper.UserMapper.findPartBy", params);
-        log.info("parts ===============> " + parts);
+        List<Part> parts = sqlsessionTemplate.selectList("com.example.firstproject.mapper.UserMapper.findPartBy", params);
+        log.info("findPartBy 쿼리 실행 후 결과: {}", parts);;
         // 전체 개수 조회
-        int total = sql.selectOne("com.example.firstproject.mapper.UserMapper.countParts", params);
+        int total = sqlsessionTemplate.selectOne("com.example.firstproject.mapper.UserMapper.countParts", params);
 
         // Page 객체로 변환
         return new PageImpl<>(parts, pageable, total);
@@ -76,12 +77,12 @@ public class PartMapper {
     // partCode로 Part 조회
     public Part findByPartCode(String partCode) {
         // partCode로 조회하는 쿼리 실행
-        return sql.selectOne("com.example.firstproject.mapper.UserMapper.findByPartCode", partCode);
+        return sqlsessionTemplate.selectOne("com.example.firstproject.mapper.UserMapper.findByPartCode", partCode);
     }
 
     // Optional로 partCode 조회
     public Optional<Part> findPartCode(String partCode) {
         // Optional로 조회하는 쿼리 실행
-        return Optional.ofNullable(sql.selectOne("com.example.firstproject.mapper.UserMapper.findPartCode", partCode));
+        return Optional.ofNullable(sqlsessionTemplate.selectOne("com.example.firstproject.mapper.UserMapper.findPartCode", partCode));
     }
 }

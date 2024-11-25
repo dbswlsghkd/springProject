@@ -4,15 +4,22 @@
 <mapper namespace="com.example.firstproject.mapper.UserMapper">
     <!-- 검색어 기반 Part 조회 -->
 
-    <select id="findPartBy" resultType="com.example.firstproject.entity.Part">
+    <select id="findPartBy" parameterType="map" resultType="com.example.firstproject.entity.Part">
         SELECT part_code, part_name, part_std, skey
         FROM part
         ORDER BY part_code
         OFFSET #{offset} ROWS FETCH NEXT #{pageSize} ROWS ONLY
     </select>
 
+    <select id="nana" parameterType="map" resultType="com.example.firstproject.entity.Buy">
+        SELECT buy_bal_no
+        FROM buy
+        ORDER BY buy_bal_no
+        OFFSET #{offset} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+    </select>
 
-    <select id="findBySearch" resultType="com.example.firstproject.entity.Part">
+
+    <select id="findBySearch" parameterType="map" resultType="com.example.firstproject.entity.Part">
         SELECT part_code, part_name, part_std, skey
         FROM part
         WHERE part_code LIKE '%' + #{searchTerm} + '%'
@@ -23,7 +30,13 @@
     </select>
 
     <!-- 전체 데이터 개수 조회 -->
-    <select id="countParts" resultType="int">
+    <select id="countParts" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM part
+    </select>
+
+    <!-- 전체 데이터 개수 조회 -->
+    <select id="countPartsSearch" parameterType="map" resultType="int">
         SELECT COUNT(*)
         FROM part
         WHERE part_code LIKE '%' + #{searchTerm} + '%'
@@ -31,7 +44,7 @@
            OR part_std LIKE '%' + #{searchTerm} + '%'
     </select>
 
-    <select id="findByPartCode" resultType="com.example.firstproject.entity.Part">
+    <select id="findByPartCode" parameterType="String" resultType="com.example.firstproject.entity.Part">
         SELECT *
         FROM part
         WHERE part_code = #{partCode}

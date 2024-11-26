@@ -47,7 +47,7 @@ const Header = ({ children }) => {
             <div className="container-fluid">
                 <div className="row gx-0">
                     {/* Sidebar Section */}
-                    <aside className="custom-sidebar col-md-3 p-3">
+                    <aside className="custom-sidebar col-md-2 p-3">
                         <h4 className="sidebar-title">사이드바</h4>
                         <div className="accordion" id="sidebarAccordion">
                             {/* First Accordion Item */}
@@ -134,7 +134,7 @@ const Header = ({ children }) => {
                     </aside>
 
                     {/* Main Article Section */}
-                    <main className="col-md-9 p-3 main-content">
+                    <main className="col-md-10 p-0 main-content">
                         <article className="bg-white p-3">
                             {children}
                         </article>

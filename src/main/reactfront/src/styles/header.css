@@ -4,7 +4,7 @@
     min-width: 180px;  /* 최소 너비 설정 */
     max-width: 250px;  /* 최대 너비 설정 */
     background-color: #f8f9fa; /* 배경 색상 설정 */
-    height: 100vh;     /* 전체 화면 높이 */
+    height: 77.8vh;     /* 전체 화면 높이 */
 }
 
 /* 모바일에서는 사이드바가 상단에 위치하도록 */

@@ -67,14 +67,18 @@ public class PartService {
     public PartDto update(String partcode, PartDto dto) {
         // 댓글 조회 및 예외 발생
         // Part target = partRepository.findPartCode(partcode)
-        Part target = partMapper.findPartCode(partcode)
-                .orElseThrow(() -> new IllegalArgumentException("품번 수정 실패! 대상 품번이 없습니다."));
+        Part target = partRepository.findByPartCode(partcode);
+        log.info("target.toString() ========> " +target.toString());
         // 댓글 수정
-        target.patch(dto);
-        // DB로 갱신
-        Part updated = partRepository.save(target);
-        // 댓글 엔티티를 DTO로 변환 및 반환
-        return PartDto.createPartDto(updated);
+        if(target == null) {
+            return null;
+        }else {
+            target.patch(dto);
+            // DB로 갱신
+            Part updated = partRepository.save(target);
+            // 댓글 엔티티를 DTO로 변환 및 반환
+            return PartDto.createPartDto(updated);
+        }
     }
 
 }

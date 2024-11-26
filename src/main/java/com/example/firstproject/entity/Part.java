@@ -28,7 +28,7 @@ public class Part {
 
     @Column(name = "part_std", length = 100, nullable = false)
     private String part_std;
-
+    @Column(name = "skey")
     private UUID skey;
 
     // 회원가입

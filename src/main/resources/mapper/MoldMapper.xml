@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.firstproject.mapper.MoldMapper">
+    <!-- 검색어 기반 Part 조회 -->
+
+    <select id="findMoldAll" parameterType="map" resultType="com.example.firstproject.entity.Mold">
+        SELECT *
+        FROM mold
+        ORDER BY m_pcode
+        OFFSET #{offset} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+    </select>
+
+    <select id="findBySearch" parameterType="map" resultType="com.example.firstproject.entity.Mold">
+        SELECT *
+        FROM mold
+        WHERE m_pcode LIKE '%' + #{searchTerm} + '%'
+           OR m_part_code LIKE '%' + #{searchTerm} + '%'
+        ORDER BY m_pcode
+        OFFSET #{offset} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+    </select>
+
+    <!-- 전체 데이터 개수 조회 -->
+    <select id="countMolds" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM mold
+    </select>
+
+    <!-- 전체 데이터 개수 조회 -->
+    <select id="countMoldsSearch" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM mold
+        WHERE m_pcode LIKE '%' + #{searchTerm} + '%'
+           OR m_part_code LIKE '%' + #{searchTerm} + '%'
+    </select>
+
+<!--    <select id="findByPartCode" parameterType="String" resultType="com.example.firstproject.entity.Mold">-->
+<!--        SELECT *-->
+<!--        FROM mold-->
+<!--        WHERE m_part_code = #{partCode}-->
+<!--    </select>-->
+
+<!--    <select id="findPartCode" resultType="com.example.firstproject.entity.Mold">-->
+<!--        SELECT *-->
+<!--        FROM mold-->
+<!--        WHERE m_part_code = #{partCode}-->
+<!--    </select>-->
+</mapper>

@@ -1,15 +1,13 @@
-package com.example.firstproject.repository;
+package com.example.firstproject.mapper;
 
 import com.example.firstproject.entity.Part;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
 
 import java.util.HashMap;
 import java.util.List;
@@ -49,7 +47,7 @@ public class PartMapper {
     //     params.put("offset", pageable.getPageNumber() * pageable.getPageSize());
     //     params.put("pageSize", pageable.getPageSize());
     //
-    //     return sql.selectList("com.example.firstproject.repository.PartMapper.findBySearch", params);
+    //     return sql.selectList("com.example.firstproject.mapper.PartMapper.findBySearch", params);
     // }
 
     // 전체 Part 조회
@@ -59,7 +57,7 @@ public class PartMapper {
         params.put("pageSize", pageable.getPageSize());
 
 
-        // return sql.selectList("com.example.firstproject.repository.PartMapper.findPartBy", params);
+        // return sql.selectList("com.example.firstproject.mapper.PartMapper.findPartBy", params);
         log.info("findPartBy 쿼리 실행 전에 도달했습니다");
         // log.info("sql ==========> " + sqlsessionTemplate.selectList("com.example.firstproject.mapper.UserMapper.nana", params));
         // log.info("sql ==========> " + sqlsessionTemplate.selectList("com.example.firstproject.mapper.UserMapper.nana", params));

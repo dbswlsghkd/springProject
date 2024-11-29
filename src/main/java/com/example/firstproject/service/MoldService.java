@@ -1,8 +1,7 @@
 package com.example.firstproject.service;
 
 import com.example.firstproject.entity.Mold;
-import com.example.firstproject.entity.Part;
-import com.example.firstproject.repository.MoldMapper;
+import com.example.firstproject.mapper.MoldMapper;
 import com.example.firstproject.repository.MoldRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

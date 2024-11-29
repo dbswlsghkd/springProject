@@ -1,4 +1,4 @@
-package com.example.firstproject.repository;
+package com.example.firstproject.mapper;
 
 import com.example.firstproject.entity.Mold;
 import lombok.RequiredArgsConstructor;

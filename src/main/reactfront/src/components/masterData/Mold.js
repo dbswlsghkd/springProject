@@ -53,7 +53,7 @@ function MoldManagement() {
     };
 
     const handleUpdatePart = async () => {
-        const url = `/api/mold/update/${encodeURIComponent(modalData.partner_code)}`;
+        const url = `/api/mold/update/${encodeURIComponent(modalData.m_pcode)}`;
         try {
             const response = await fetch(url, {
                 method: "PATCH",

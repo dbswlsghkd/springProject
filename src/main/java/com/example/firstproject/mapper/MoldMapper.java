@@ -1,6 +1,7 @@
 package com.example.firstproject.mapper;
 
 import com.example.firstproject.entity.Mold;
+import com.example.firstproject.entity.Part;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -54,5 +55,10 @@ public class MoldMapper {
 
         // Page 객체로 변환
         return new PageImpl<>(molds, pageable, total);
+    }
+
+    // partCode로 Part 조회
+    public Mold findByMoldCode(String mCode) {
+        return sqlSessionTemplate.selectOne("com.example.firstproject.mapper.MoldMapper.findByMoldCode", mCode);
     }
 }

@@ -1,15 +1,17 @@
 package com.example.firstproject.api;
 
+import com.example.firstproject.dto.MoldDto;
 import com.example.firstproject.entity.Mold;
 import com.example.firstproject.service.MoldService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -29,5 +31,25 @@ public class MoldApiController {
             return moldService.searchMold(searchTerm, pageable);
         }
         return moldService.index(pageable);
+    }
+
+    @PostMapping("api/mold/create")
+    public ResponseEntity<MoldDto> create(@RequestBody MoldDto moldDto){
+        MoldDto createDto = moldService.create(moldDto);
+
+        return (createDto != null) ? ResponseEntity.ok(createDto) : ResponseEntity.notFound().build();
+
+    }
+
+    @PatchMapping("/api/mold/update/{m_pcode}")
+    public ResponseEntity<MoldDto> update(@PathVariable String m_pcode,@RequestBody MoldDto moldDto){
+        MoldDto updateDto = moldService.update(m_pcode, moldDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(updateDto);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<String> handleEntityNotFoundException(EntityNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 }

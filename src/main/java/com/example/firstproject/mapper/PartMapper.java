@@ -78,9 +78,4 @@ public class PartMapper {
         return sqlsessionTemplate.selectOne("com.example.firstproject.mapper.UserMapper.findByPartCode", partCode);
     }
 
-    // Optional로 partCode 조회
-    public Optional<Part> findPartCode(String partCode) {
-        // Optional로 조회하는 쿼리 실행
-        return Optional.ofNullable(sqlsessionTemplate.selectOne("com.example.firstproject.mapper.UserMapper.findPartCode", partCode));
-    }
 }

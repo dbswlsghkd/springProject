@@ -40,9 +40,4 @@
         WHERE m_pcode = #{mCode}
     </select>
 
-<!--    <select id="findPartCode" resultType="com.example.firstproject.entity.Mold">-->
-<!--        SELECT *-->
-<!--        FROM mold-->
-<!--        WHERE m_part_code = #{partCode}-->
-<!--    </select>-->
 </mapper>

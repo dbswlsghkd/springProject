@@ -29,10 +29,8 @@ public class MoldMapper {
         params.put("offset", pageable.getPageNumber() * pageable.getPageSize());
         params.put("pageSize", pageable.getPageSize());
 
-        log.info("findBySearch 쿼리 실행 전에 도달했습니다");
         // 데이터 조회
         List<Mold> molds = sqlSessionTemplate.selectList("com.example.firstproject.mapper.MoldMapper.findBySearch", params);
-        log.info("findBySearch 쿼리 실행 후 결과: {}", molds);
         // 전체 개수 조회
         int total = sqlSessionTemplate.selectOne("com.example.firstproject.mapper.MoldMapper.countMoldsSearch", params);
 

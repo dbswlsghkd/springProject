@@ -55,12 +55,6 @@ public class PartMapper {
         Map<String, Object> params = new HashMap<>();
         params.put("offset", pageable.getPageNumber() * pageable.getPageSize());
         params.put("pageSize", pageable.getPageSize());
-
-
-        // return sql.selectList("com.example.firstproject.mapper.PartMapper.findPartBy", params);
-        log.info("findPartBy 쿼리 실행 전에 도달했습니다");
-        // log.info("sql ==========> " + sqlsessionTemplate.selectList("com.example.firstproject.mapper.UserMapper.nana", params));
-        // log.info("sql ==========> " + sqlsessionTemplate.selectList("com.example.firstproject.mapper.UserMapper.nana", params));
         // 데이터 조회
         List<Part> parts = sqlsessionTemplate.selectList("com.example.firstproject.mapper.UserMapper.findPartBy", params);
         log.info("findPartBy 쿼리 실행 후 결과: {}", parts);;

@@ -4,9 +4,12 @@ import com.example.firstproject.dto.PartDto;
 import com.example.firstproject.dto.PartnersDto;
 import com.example.firstproject.entity.Part;
 import com.example.firstproject.entity.Partners;
+import com.example.firstproject.mapper.PartnerMapper;
 import com.example.firstproject.repository.PartRepository;
 import com.example.firstproject.repository.PartnersRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,18 +20,21 @@ import java.util.List;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class PartnersService {
 
     @Autowired
     private PartnersRepository partnersRepository;
 
+    private final PartnerMapper partnerMapper;
+
     public Page<Partners> index(Pageable pageable) {
-        return partnersRepository.findByPartners(pageable);
+        return partnerMapper.findByPartners(pageable);
     }
 
     public Page<Partners> searchParts(String searchTerm, Pageable pageable) {
         String searchPattern = "%" + searchTerm + "%";
-        return partnersRepository.findBySearch(searchPattern, pageable);
+        return partnerMapper.findBySearch(searchPattern, pageable);
     }
 
     public String getMaxPartnerCode() {
@@ -38,7 +44,7 @@ public class PartnersService {
     @Transactional
     public PartnersDto create(PartnersDto dto) {
         // 품번 조회 및 예외 발생
-        Partners partners = partnersRepository.findByPartnersCode(dto.getPartner_code());
+        Partners partners = partnerMapper.findByPartnersCode(dto.getPartner_code());
 
         // 로그인 실패 시
         if (partners == null) {

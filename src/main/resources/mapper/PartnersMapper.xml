@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.firstproject.mapper.PartnerMapper">
+    <!-- 검색어 기반 Part 조회 -->
+
+    <select id="findByPartners" parameterType="map" resultType="com.example.firstproject.entity.Partners">
+        SELECT *
+        FROM partner
+        ORDER BY partner_code
+        OFFSET #{offset} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+    </select>
+
+    <select id="findBySearch" parameterType="map" resultType="com.example.firstproject.entity.Partners">
+        SELECT *
+        FROM partner
+        WHERE partner_code LIKE '%' + #{searchTerm} + '%'
+           OR partner_name LIKE '%' + #{searchTerm} + '%'
+           OR partner_address LIKE '%' + #{searchTerm} + '%'
+        ORDER BY partner_code
+        OFFSET #{offset} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+    </select>
+
+    <!-- 전체 데이터 개수 조회 -->
+    <select id="countPartners" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM partner
+    </select>
+
+    <!-- 전체 데이터 개수 조회 -->
+    <select id="countByPartnersSearch" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM partner
+        WHERE partner_code LIKE '%' + #{searchTerm} + '%'
+           OR partner_name LIKE '%' + #{searchTerm} + '%'
+           OR partner_address LIKE '%' + #{searchTerm} + '%'
+    </select>
+
+    <select id="findByPartnersCode" parameterType="String" resultType="com.example.firstproject.entity.Partners">
+        SELECT *
+        FROM partner
+        WHERE partner_code = #{partnersCode}
+    </select>
+
+</mapper>

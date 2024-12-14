@@ -19,17 +19,21 @@ import java.util.UUID;
 
 public class PartDto {
 
+    public UUID getPart_skey() {
+        return part_skey;
+    }
+
     private String part_code;
     private String part_name;
     private String part_std;
-    private UUID skey;
+    private UUID part_skey;
 
     public static PartDto createPartDto(Part part) {
         return new PartDto(
                 part.getPart_code(),
                 part.getPart_name(),
                 part.getPart_std(),
-                part.getSkey()
+                part.getPart_skey()
         );
     }
 }

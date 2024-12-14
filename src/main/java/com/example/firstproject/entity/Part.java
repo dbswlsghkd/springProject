@@ -28,8 +28,9 @@ public class Part {
 
     @Column(name = "part_std", length = 100, nullable = false)
     private String part_std;
-    @Column(name = "skey")
-    private UUID skey;
+
+    @Column(name = "part_skey")
+    private UUID part_skey;
 
     // 회원가입
     public static Part createPart(PartDto dto) {
@@ -39,7 +40,7 @@ public class Part {
                 dto.getPart_code(),
                 dto.getPart_name(),
                 dto.getPart_std(),
-                dto.getSkey()
+                dto.getPart_skey()
         );
     }
 
@@ -58,8 +59,8 @@ public class Part {
 
     @PrePersist
     public void generateUUID() {
-        if (this.skey == null) {
-            this.skey = UUID.randomUUID(); // UUID 생성
+        if (this.part_skey == null) {
+            this.part_skey = UUID.randomUUID(); // UUID 생성
         }
     }
 

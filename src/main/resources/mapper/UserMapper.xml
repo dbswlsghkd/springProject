@@ -5,7 +5,7 @@
     <!-- 검색어 기반 Part 조회 -->
 
     <select id="findPartBy" parameterType="map" resultType="com.example.firstproject.entity.Part">
-        SELECT part_code, part_name, part_std, skey
+        SELECT part_code, part_name, part_std, part_skey
         FROM part
         ORDER BY part_code
         OFFSET #{offset} ROWS FETCH NEXT #{pageSize} ROWS ONLY
@@ -20,7 +20,7 @@
 
 
     <select id="findBySearch" parameterType="map" resultType="com.example.firstproject.entity.Part">
-        SELECT part_code, part_name, part_std, skey
+        SELECT part_code, part_name, part_std, part_skey
         FROM part
         WHERE part_code LIKE '%' + #{searchTerm} + '%'
            OR part_name LIKE '%' + #{searchTerm} + '%'

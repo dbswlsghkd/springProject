@@ -16,6 +16,9 @@ const Header = ({ children }) => {
                     <div className="collapse navbar-collapse" id="navbarNav">
                         <ul className="navbar-nav ms-auto">
                             <li className="nav-item">
+                                <Link className="nav-link active" to="/">로그아웃</Link>
+                            </li>
+                            <li className="nav-item">
                                 <Link className="nav-link active" to="#">홈</Link>
                             </li>
                             <li className="nav-item">

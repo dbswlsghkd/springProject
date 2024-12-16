@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.firstproject.mapper.ModelMapper">
+    <!-- 검색어 기반 Part 조회 -->
+
+    <select id="findModelAll" parameterType="map" resultType="com.example.firstproject.entity.Model">
+        SELECT *
+        FROM model
+        ORDER BY model_code
+        OFFSET #{offset} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+    </select>
+
+    <select id="findBySearch" parameterType="map" resultType="com.example.firstproject.entity.Model">
+        SELECT *
+        FROM model
+        WHERE model_code LIKE '%' + #{searchTerm} + '%'
+           OR model_name LIKE '%' + #{searchTerm} + '%'
+        ORDER BY model_code
+        OFFSET #{offset} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+    </select>
+
+    <!-- 전체 데이터 개수 조회 -->
+    <select id="countModels" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM model
+    </select>
+
+    <!-- 전체 데이터 개수 조회 -->
+    <select id="countModelsSearch" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM model
+        WHERE model_code LIKE '%' + #{searchTerm} + '%'
+           OR model_name LIKE '%' + #{searchTerm} + '%'
+    </select>
+
+    <select id="findByModelCode" parameterType="String" resultType="com.example.firstproject.entity.Model">
+        SELECT *
+        FROM model
+        WHERE model_code = #{mCode}
+    </select>
+
+</mapper>

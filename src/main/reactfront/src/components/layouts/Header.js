@@ -19,7 +19,7 @@ const Header = ({ children }) => {
                                 <Link className="nav-link active" to="/">로그아웃</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link active" to="#">홈</Link>
+                                <Link className="nav-link" to="#">홈</Link>
                             </li>
                             <li className="nav-item">
                                 <Link className="nav-link" to="#">소개</Link>

@@ -19,13 +19,13 @@ public class ModelDto {
 
     private String model_code;
     private String model_name;
-    private LocalDateTime regdt;
+    private LocalDateTime model_regdt;
 
     public static ModelDto createModelDto(Model model) {
         return new ModelDto(
                 model.getModel_code(),
                 model.getModel_name(),
-                model.getRegdt()
+                model.getModel_regdt()
         );
     }
 

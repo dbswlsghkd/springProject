@@ -24,13 +24,13 @@ public class Model {
     @Column(name = "model_code", length = 5, columnDefinition = "CHAR(5)") // 길이를 50으로 지정
     private String model_code;
     private String model_name;
-    private LocalDateTime regdt;
+    private LocalDateTime model_regdt;
 
 
     // 엔티티가 처음 저장되기 전에 regdt에 현재 시각을 자동으로 설정
     @PrePersist
     public void prePersist() {
-        this.regdt = this.regdt == null ? LocalDateTime.now() : this.regdt;
+        this.model_regdt = this.model_regdt == null ? LocalDateTime.now() : this.model_regdt;
     }
 
     // 모델 등록
@@ -40,7 +40,7 @@ public class Model {
         return new Model(
                 dto.getModel_code(),
                 dto.getModel_name(),
-                dto.getRegdt()
+                dto.getModel_regdt()
         );
     }
 

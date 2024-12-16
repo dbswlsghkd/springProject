@@ -5,7 +5,9 @@ import com.example.firstproject.dto.PartDto;
 import com.example.firstproject.entity.Model;
 import com.example.firstproject.entity.Part;
 import com.example.firstproject.entity.Partners;
+import com.example.firstproject.mapper.ModelMapper;
 import com.example.firstproject.repository.ModelRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,18 +17,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class ModelService {
 
     @Autowired
     private ModelRepository modelRepository;
 
+    private final ModelMapper modelMapper;
+
     public Page<Model> index(Pageable pageable) {
-        return modelRepository.findModelBy(pageable);
+        return modelMapper.findModelAll(pageable);
     }
 
     public Page<Model> searchModel(String searchTerm, Pageable pageable) {
         String searchPattern = "%" + searchTerm + "%";
-        return modelRepository.findBySearch(searchPattern, pageable);
+        return modelMapper.findBySearch(searchPattern, pageable);
     }
 
     // 등록
@@ -35,7 +40,7 @@ public class ModelService {
 
         log.info("ModelDto" + dto.toString());
         // entity에서 id 찾기
-        Model model = modelRepository.findByModelCode(dto.getModel_code());
+        Model model = modelMapper.findByModelCode(dto.getModel_code());
         if(model == null) {
             // 모델 등록 엔티티 생성
             Model createModel = Model.createModel(dto);
@@ -54,7 +59,7 @@ public class ModelService {
     // 수정
     @Transactional
     public ModelDto update(String modelcode, ModelDto dto) {
-        Model target = modelRepository.findByModelCode(modelcode);
+        Model target = modelMapper.findByModelCode(modelcode);
 
         if(target == null) {
             return null;

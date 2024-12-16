@@ -117,7 +117,7 @@ function ModelManagement() {
                             <tr key={model.model_code} onClick={() => openUpdateModal(model)}>
                                 <th>{model.model_code}</th>
                                 <td>{model.model_name}</td>
-                                <td>{model.regdt}</td>
+                                <td>{model.model_regdt}</td>
                             </tr>
                         ))}
                         </tbody>
